@@ -16,3 +16,8 @@ jobs:
         dotnet-version: 2.2.108
     - name: Build with dotnet
       run: dotnet msbuild NLua.sln -p:Configuration=Release
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: NLua        
+        path: lib\Release\net45
