@@ -35,6 +35,7 @@ namespace NLua
             _extractValues.Add(typeof(byte[]), GetAsByteArray);
             _extractValues.Add(typeof(LuaFunction), GetAsFunction);
             _extractValues.Add(typeof(LuaTable), GetAsTable);
+            _extractValues.Add(typeof(Dictionary<object, object>), GetAsDictionary);
             _extractValues.Add(typeof(LuaUserData), GetAsUserdata);
             _extractNetObject = GetAsNetObject;
         }
@@ -147,6 +148,10 @@ namespace NLua
             {
                 if (luatype == LuaType.Function || luatype == LuaType.Nil)
                     return _extractValues[paramType];
+            }
+            else if (paramType == typeof(Dictionary<object, object>) && luaState.Type(stackPos) == LuaType.Table)
+            {
+                return _extractValues[paramType];
             }
             else if (typeof(Delegate).IsAssignableFrom(paramType) && luatype == LuaType.Function)
                 return new DelegateGenerator(_translator, paramType).ExtractGenerated;
@@ -354,6 +359,11 @@ namespace NLua
         private object GetAsFunction(LuaState luaState, int stackPos)
         {
             return _translator.GetFunction(luaState, stackPos);
+        }
+
+        public Dictionary<object, object> GetAsDictionary(LuaState luaState, int stackPos)
+        {
+            return _translator.GetDictionary(luaState, stackPos);
         }
 
         private object GetAsUserdata(LuaState luaState, int stackPos)
