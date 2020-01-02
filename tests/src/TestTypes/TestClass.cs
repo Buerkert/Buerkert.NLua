@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using NLua;
 
 namespace NLuaTest.TestTypes
@@ -341,6 +343,11 @@ namespace NLuaTest.TestTypes
         {
             LongValue = param;
 
+            return param;
+        }
+
+        public Dictionary<object, object> MethodWithDictionary(Dictionary<object, object> param)
+        {
             return param;
         }
     }

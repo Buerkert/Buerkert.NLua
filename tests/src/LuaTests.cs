@@ -2517,6 +2517,25 @@ namespace NLuaTest
             }
         }
 
+
+        [Test]
+        public void PassIDictionaryToLua()
+        {
+            //Dictionary<object, object> dictionary = new Dictionary<object, object>() {{"test", "testValue"}};
+
+            using (var lua = new Lua())
+            {
+                string name = "MethodWithDictionary";
+                var testClass = new TestClass();
+                lua.RegisterFunction(name, testClass, typeof(TestClass).GetMethod(nameof(TestClass.MethodWithDictionary)));
+                lua.DoString($@"param = {{""test"",""testValue""}}
+                                x = {name}(param)");
+                object result = lua.GetObjectFromPath("x");
+
+            }
+        }
+
+
         [Test]
         public void CallMethodWithGeneric()
         {
