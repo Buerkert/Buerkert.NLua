@@ -1,39 +1,20 @@
-👋 Hello there! | 
------------- | 
-> 🔭 Thank you for checking out this project.
->
-> 🍻 We've made the project Open Source and **MIT** license so everyone can enjoy it. 
->
-> 🛠 To deliver a project with quality we have to spent a lot of time working on it.
-> 
-> ⭐️ If you liked the project please star it.
->
-> 💕 We also appreaciate any **Sponsor**  [ [Patreon](https://www.patreon.com/codefoco) | [PayPal](https://paypal.me/viniciusjarina) ] 
 
 [![Logo](https://secure.gravatar.com/avatar/77ecf0fb9d8419be7715c6e822e66562?s=150)]()
 
 NLua
 =======
 
-| NuGet |
-| ------|
-|[![nuget](https://badgen.net/nuget/v/NLua?icon=nuget)](https://www.nuget.org/packages/NLua)|
+[![GitHub Actions](https://github.com/Buerkert/Buerkert.NLua/workflows/CI/badge.svg)](https://github.com/Buerkert/Buerkert.NLua/actions)
+<!--[![nuget](https://badgen.net/nuget/v/NLua?icon=nuget)](https://www.nuget.org/packages/NLua)-->
 
-|  | Status | 
-| :------ | :------: | 
-| ![linux](https://badgen.net/badge/icon/Ubuntu%20Linux%20x64?icon=travis&label&color=orange)   | [![Linux](https://travis-ci.org/NLua/NLua.svg?branch=master)](https://travis-ci.org/NLua/NLua) |
-| ![win](https://badgen.net/badge/icon/Windows?icon=windows&label&color=blue) | [![Build status](https://ci.appveyor.com/api/projects/status/jkqcy9m9k35jwolx?svg=true)](https://ci.appveyor.com/project/viniciusjarina/NLua)|
-| ![mac](https://badgen.net/badge/icon/macOS,iOS,tvOS,watchOS?icon=apple&label&color=purple&list=1) | [![Build Status](https://dev.azure.com/codefoco/NuGets/_apis/build/status/NLua/NLua.Mac?branchName=master)](https://dev.azure.com/codefoco/NuGets/_build/latest?definitionId=13&branchName=master) |
-|![win](https://badgen.net/badge/icon/Windows,.NET%20Core?icon=windows&label&list=1) | [![Build Status](https://dev.azure.com/codefoco/NuGets/_apis/build/status/NLua/NLua.Windows?branchName=master)](https://dev.azure.com/codefoco/NuGets/_build/latest?definitionId=14&branchName=master) |
-
-
-Bridge between Lua world and the .NET (compatible with Xamarin.iOS/Mac/Android/.NET/.NET Core) 
+Bridge between Lua world and the .NET
 
 Building
 ---------
 
-	msbuild NLua.sln
-
+```sh
+msbuild NLua.sln
+```
 
 ***
 
@@ -45,32 +26,33 @@ NLua allows the usage of Lua from C#, on Windows, Linux, Mac, iOS , Android.
 NLua is a fork project of LuaInterface (from Fábio Mascarenhas/Craig Presti).
 
 Example:
-You can use/instantiate any .NET class without any previous registration or annotation. 
-```csharp
-	public class SomeClass
-	{
-		public string MyProperty {get; private set;}
-		
-		public SomeClass (string param1 = "defaulValue")
-		{
-			MyProperty = param1;
-		}
-		
-		public int Func1 ()
-		{
-			return 32;
-		}
-		
-		public string AnotherFunc (int val1, string val2)
-		{
-			return "Some String";
-		}
-		
-		public static string StaticMethod (int param)
-		{
-			return "Return of Static Method";
-		}
+You can use/instantiate any .NET class without any previous registration or annotation.
 
+```csharp
+public class SomeClass
+{
+	public string MyProperty {get; private set;}
+	
+	public SomeClass (string param1 = "defaulValue")
+	{
+		MyProperty = param1;
+	}
+	
+	public int Func1 ()
+	{
+		return 32;
+	}
+	
+	public string AnotherFunc (int val1, string val2)
+	{
+		return "Some String";
+	}
+	
+	public static string StaticMethod (int param)
+	{
+		return "Return of Static Method";
+	}
+}
 ```
 
 * Using UTF-8 Encoding:

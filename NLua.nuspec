@@ -2,39 +2,24 @@
 <package>
   <metadata>
     <id>NLua</id>
-    <version>1.4.11</version>
-    <authors>NLua</authors>
-    <owners>Vinicius Jarina</owners>
-    <licenseUrl>https://github.com/nlua/NLua/blob/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/nlua/NLua</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/nlua/NLua/master/NLua.png</iconUrl>
+    <version>1.0.0</version>
+    <authors>Buerkert</authors>
+    <owners>Buerkert</owners>
+    <licenseUrl>https://github.com/Buerkert/Buerkert.NLua/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/Buerkert/Buerkert.NLua</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/Buerkert/Buerkert.NLua/master/NLua.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>NLua Package.</description>
-    <summary>NLua allow use Lua from C#, using Windows, Linux, Mac, iOS , Android.</summary>
-    <releaseNotes>Release: 2bffe65</releaseNotes>
-    <copyright>Copyright © NLua 2019</copyright>
+    <summary>NLua allow use Lua from C#, using Windows.</summary>
+    <copyright>Copyright © Buerkert 2020</copyright>
     <tags>lua nlua</tags>
     <dependencies>
-      <dependency id="KeraLua" version="1.0.22" />
+      <dependency id="Buerkert.KeraLua" version="1.0.0" />
     </dependencies>
   </metadata>
   <files>
-    <file src="lib\Release\MonoAndroid\NLua.dll" target="lib\MonoAndroid" />
     <file src="lib\Release\net45\NLua.dll" target="lib\net45" />
-    <file src="lib\Release\netcore\netcoreapp2.0\NLua.dll" target="lib\netcoreapp2.0" />
-    <file src="lib\Release\netstandard2.0\NLua.dll" target="lib\netstandard2.0" />
-    <file src="lib\Release\xamarinios\NLua.dll" target="lib\xamarinios" />
-    <file src="lib\Release\xamarinmac\NLua.dll" target="lib\xamarinmac" />
-    <file src="lib\Release\xamarintvos\NLua.dll" target="lib\xamarintvos" />
-    <file src="lib\Release\xamarinwatchos\NLua.dll" target="lib\xamarinwatchos" />
-<!--   <file src="lib\Release\netstandard2.0\NLua.xml" target="lib\netstandard2.0" />
-    <file src="lib\Release\netcore\netcoreapp2.0\NLua.xml" target="lib\netcoreapp2.0" />
-    <file src="lib\Release\MonoAndroid\NLua.xml" target="lib\MonoAndroid" />
-    <file src="lib\Release\net45\NLua.xml" target="lib\xamarinmac" />
-    <file src="lib\Release\net45\NLua.xml" target="lib\xamarintvos" />
     <file src="lib\Release\net45\NLua.xml" target="lib\net45" />
-    <file src="lib\Release\net45\NLua.xml" target="lib\xamarinios" />
-    <file src="lib\Release\net45\NLua.xml" target="lib\xamarinwatchos" /> -->
     <file src="LICENSE" target="LICENSE" />
   </files>
 </package>
