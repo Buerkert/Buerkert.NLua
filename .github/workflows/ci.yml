@@ -14,10 +14,16 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 2.2.108
+    - name: Setup Nuget.exe
+      uses: warrenbuckley/Setup-Nuget@v1
     - name: Build with dotnet
-      run: dotnet msbuild NLua.sln -p:Configuration=Release
+      run: dotnet msbuild NLua.sln -p:Configuration=Release -r
+    - name: Run unit tests
+      run: packages\NUnit.ConsoleRunner\3.10.0\tools\nunit3-console.exe tests\build\net45\bin\Release\NLuaTest.dll --output=lib\Release\net45\testResults.xml
+    - name: Pack nuget package
+      run: nuget pack NLua.nuspec -OutputDirectory lib\Release\net45
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
       with:
-        name: NLua        
+        name: NLua
         path: lib\Release\net45

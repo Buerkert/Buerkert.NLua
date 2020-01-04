@@ -35,7 +35,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="KeraLua">
+    <PackageReference Include="Buerkert.KeraLua">
       <Version>1.0.0</Version>
     </PackageReference>
   </ItemGroup>
