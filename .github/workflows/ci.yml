@@ -16,6 +16,8 @@ jobs:
         dotnet-version: 2.2.108
     - name: Setup Nuget.exe
       uses: warrenbuckley/Setup-Nuget@v1
+    - name: Add private GitHub registry to NuGet
+      run: nuget sources update -name BuerkertGithubPackageRegistry -Username Buerkert -Password ${{ secrets.GITHUB_TOKEN }} -ConfigFile nuget.config
     - name: Build with dotnet
       run: dotnet msbuild NLua.sln -p:Configuration=Release -r
     - name: Run unit tests
