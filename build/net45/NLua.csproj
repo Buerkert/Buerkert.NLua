@@ -35,11 +35,16 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Buerkert.KeraLua">
-      <Version>1.0.0</Version>
-    </PackageReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="..\..\src\NLua.Shared.projitems" Label="Shared" Condition="Exists('..\..\src\NLua.Shared.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="..\targets\NLua.Sign.targets" />
+  <Import Project="..\..\packages\Buerkert.KeraLua.1.1.0\build\net45\Buerkert.KeraLua.targets" Condition="Exists('..\..\packages\Buerkert.KeraLua.1.1.0\build\net45\Buerkert.KeraLua.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\Buerkert.KeraLua.1.1.0\build\net45\Buerkert.KeraLua.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Buerkert.KeraLua.1.1.0\build\net45\Buerkert.KeraLua.targets'))" />
+  </Target>
 </Project>
