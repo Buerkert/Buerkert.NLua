@@ -14,8 +14,7 @@
     <copyright>Copyright © Buerkert 2020</copyright>
     <tags>lua nlua</tags>
     <dependencies>
-      <group targetFramework=".NETFramework4.5" />
-      <group>
+      <group targetFramework=".NETFramework4.5" >
         <dependency id="Buerkert.KeraLua" version="1.1.0" />
       </group>
     </dependencies>
