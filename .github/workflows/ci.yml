@@ -23,7 +23,7 @@ jobs:
     - name: Build with dotnet
       run: dotnet msbuild NLua.sln -p:Configuration=Release -r
     - name: Run unit tests
-      run: packages\NUnit.ConsoleRunner\3.10.0\tools\nunit3-console.exe tests\build\net45\bin\Release\NLuaTest.dll --output=lib\Release\net45\testResults.xml
+      run: packages\NUnit.ConsoleRunner.3.10.0\tools\nunit3-console.exe tests\build\net45\bin\Release\NLuaTest.dll --output=lib\Release\net45\testResults.xml
     - name: Pack nuget package
       run: nuget pack NLua.nuspec -OutputDirectory lib\Release\net45
     - name: Upload artifact
