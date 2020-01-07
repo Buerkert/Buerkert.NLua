@@ -5,21 +5,25 @@
     <version>1.0.0</version>
     <authors>Buerkert</authors>
     <owners>Buerkert</owners>
-    <licenseUrl>https://github.com/Buerkert/Buerkert.NLua/blob/master/LICENSE</licenseUrl>
+    <license type="file">LICENSE.txt</license>
     <projectUrl>https://github.com/Buerkert/Buerkert.NLua</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/Buerkert/Buerkert.NLua/master/NLua.png</iconUrl>
+    <icon>NLua.png</icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>NLua Package.</description>
     <summary>NLua allow use Lua from C#, using Windows.</summary>
     <copyright>Copyright © Buerkert 2020</copyright>
     <tags>lua nlua</tags>
     <dependencies>
-      <dependency id="Buerkert.KeraLua" version="1.0.0" />
+      <group targetFramework=".NETFramework4.5" />
+      <group>
+        <dependency id="Buerkert.KeraLua" version="1.1.0" />
+      </group>
     </dependencies>
   </metadata>
   <files>
     <file src="lib\Release\net45\NLua.dll" target="lib\net45" />
-    <file src="lib\Release\net45\NLua.xml" target="lib\net45" />
-    <file src="LICENSE" target="LICENSE" />
+    <!-- <file src="lib\Release\net45\NLua.xml" target="lib\net45" /> -->
+    <file src="NLua.png" target="NLua.png" />
+    <file src="LICENSE.txt" target="LICENSE.txt" />
   </files>
 </package>
