@@ -26,7 +26,9 @@ jobs:
     - name: Pack nuget package
       run: nuget pack NLua.nuspec -OutputDirectory lib\Release\net45
     - name: Add private GitHub registry to NuGet
-      run: nuget sources add -name "GPR" -Source https://nuget.pkg.github.com/Buerkert/index.json -Username Buerkert -Password ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        nuget sources remove -name "GPR" -Source https://nuget.pkg.github.com/Buerkert/index.json
+        nuget sources add -name "GPR" -Source https://nuget.pkg.github.com/Buerkert/index.json -Username Buerkert -Password ${{ secrets.GITHUB_TOKEN }}
     - name: Push generated package to GitHub registry
       run: nuget push lib\Release\net45\*.nupkg -Source "GPR"
     - name: Upload NLua artifact
