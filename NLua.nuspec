@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <metadata>
-    <id>NLua</id>
+    <id>Buerkert.NLua</id>
     <version>1.0.0</version>
     <authors>Buerkert</authors>
     <owners>Buerkert</owners>
