@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Buerkert.NLua</id>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <authors>Buerkert</authors>
     <owners>Buerkert</owners>
     <license type="file">LICENSE.txt</license>
