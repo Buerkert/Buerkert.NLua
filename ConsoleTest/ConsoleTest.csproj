@@ -75,10 +75,6 @@
   </Target>
   -->
   <ItemGroup>
-    <ProjectReference Include="..\Core\KopiLua\KopiLua\KopiLua.Net45.csproj">
-      <Project>{E8DDBC21-EF74-4ABA-9C49-BFC702BE25D8}</Project>
-      <Name>KopiLua.Net45</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Core\NLua\NLua.Net45.csproj">
       <Project>{F55CABBB-4108-4A39-94E1-581FD46DC021}</Project>
       <Name>NLua.Net45</Name>
