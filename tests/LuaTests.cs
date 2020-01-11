@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
+using System.IO;
 using NLuaTest.Mock;
 using System.Reflection;
 using System.Threading;
@@ -149,6 +150,12 @@ namespace NLuaTest
 	#endif
 	public class LuaTests
 	{
+        [OneTimeSetUp]
+        public void Init()
+        {
+            Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
+        }
+
 		public static readonly char UnicodeChar = '\uE007';
 		public static string UnicodeString
 		{

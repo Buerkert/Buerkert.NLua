@@ -65,4 +65,5 @@ Makefile.in
 /missing
 /config.status
 
+packages/*
 .vs

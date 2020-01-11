@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using NLua;
 
 using NLuaTest.Mock;
@@ -26,12 +27,19 @@ namespace LoadFileTests
 	#endif
 	public class LoadLuaFile
 	{
+
+        [OneTimeSetUp]
+        public void Init()
+        {
+			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
+        }
+
 		/*
         * Tests capturing an exception
         */
 		[Test]
 		public void TestLoadFile ()
-		{
+        {
 			using (Lua lua = new Lua ()) {
 				lua.LoadCLRPackage ();
 

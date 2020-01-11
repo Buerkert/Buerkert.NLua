@@ -26,6 +26,12 @@ namespace NLuaTest
 	#endif
 	public class Core
 	{
+        [OneTimeSetUp]
+        public void Init()
+        {
+            Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
+        }
+
 		Lua lua = null;
 
 		string GetTestPath(string name)
@@ -78,7 +84,7 @@ namespace NLuaTest
 		}
 		
 		[Test]
-		[Ignore]
+		//[Ignore]
 		public void Env ()
 		{
 			TestLuaFile ("env");
@@ -109,7 +115,7 @@ namespace NLuaTest
 		}
 		
 		[Test]
-		[Ignore]
+		//[Ignore]
 		public void ReadOnly ()
 		{
 			TestLuaFile ("readonly");
@@ -128,7 +134,7 @@ namespace NLuaTest
 		}
 		
 		[Test]
-		[Ignore]
+		//[Ignore]
 		public void TraceGlobals ()
 		{
 			TestLuaFile ("trace-globals");
