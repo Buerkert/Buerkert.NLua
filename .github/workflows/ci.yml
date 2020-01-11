@@ -19,9 +19,9 @@ jobs:
     - name: submodules-init
       uses: snickerbockers/submodules-init@v4
     - name: nuget restore
-      run: nuget restore NLua.sln
+      run: nuget restore NLua.Net45.sln
     - name: Build with dotnet
-      run: dotnet msbuild NLua.sln -p:Configuration=Release -r
+      run: dotnet msbuild NLua.Net45.sln -p:Configuration=Release -r
     - name: Run unit tests
       run: packages\NUnit.ConsoleRunner.3.10.0\tools\nunit3-console.exe tests\build\NLuaTest.dll --work=Run\Release\net45
     - name: Pack nuget package
