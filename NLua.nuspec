@@ -7,7 +7,6 @@
     <owners>Buerkert</owners>
     <license type="file">LICENSE.txt</license>
     <projectUrl>https://github.com/Buerkert/Buerkert.NLua</projectUrl>
-    <icon>NLua.png</icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>NLua Package.</description>
     <summary>NLua allow use Lua from C#, using Windows.</summary>
