@@ -123,6 +123,7 @@
       <Name>KeraLua.Net45</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="..\KeraLua\src\KeraLua.targets" />
   <ItemGroup>
     <None Include="key.snk" />
   </ItemGroup>
