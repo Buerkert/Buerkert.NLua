@@ -1,5 +1,7 @@
 ﻿//note: this should be cleaned up and replaced with moq mocks where possible
 
+using System.Collections.Generic;
+
 namespace NLuaTest.Mock
 {
     using System;
@@ -603,6 +605,11 @@ namespace NLuaTest.Mock
 				output += msg.ToString() + "\t";
 			}
 			Console.WriteLine(output);
+		}
+
+		public Dictionary<object, object> MethodWithDictionary(Dictionary<object, object> param)
+		{
+			return param;
 		}
 
 		static public int MethodWithParams (int a, params int[] others) {

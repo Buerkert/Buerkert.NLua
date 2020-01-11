@@ -991,6 +991,8 @@ namespace NLua
 				(((ILuaGeneratedType)o).LuaInterfaceGetLuaTable ()).Push (luaState);
 			else if (o is LuaTable)
 				((LuaTable)o).Push (luaState);
+			else if (o is Dictionary<object, object> dictionary)
+				PushDictionaryAsTable(luaState, dictionary);
 			else if (o is LuaNativeFunction)
 				PushFunction (luaState, (LuaNativeFunction)o);
 			else if (o is LuaFunction)
@@ -998,6 +1000,47 @@ namespace NLua
 			else
 				PushObject (luaState, o, "luaNet_metatable");
 		}
+
+
+		public void PushDictionaryAsTable<A, B>(LuaState luaState, Dictionary<A, B> dict)
+		{
+			LuaLib.LuaNewTable(luaState); //-0 +1
+			foreach (var kv in dict)
+			{
+				Push(luaState, kv.Key); //-0 +1
+				Push(luaState, kv.Value); //-0 +1
+				LuaLib.LuaSetTable(luaState,-3); //-0 +1
+			}
+		}
+
+		public Dictionary<object, object> GetDictionary(LuaState luaState, int stackPos)
+		{
+			LuaTable table = GetTable(luaState, stackPos);
+
+			Dictionary<object, object> dict = new Dictionary<object, object>();
+			int oldTop = LuaLib.LuaGetTop(luaState);
+			Push(luaState, table);
+			LuaLib.LuaPushNil(luaState);
+
+			while (LuaLib.LuaNext(luaState,-2) != 0)
+			{
+				var key = GetObject(luaState, -2);
+				var value = GetObject(luaState, -1);
+
+				if (key is LuaTable)
+					key = GetDictionary(luaState, -2);
+
+				if (value is LuaTable)
+					value = GetDictionary(luaState, -1);
+
+				LuaLib.LuaSetTop(luaState,-2);
+				dict[key] = value;
+			}
+
+			LuaLib.LuaSetTop(luaState, oldTop);
+			return dict;
+		}
+
 
 		/*
 		 * Checks if the method matches the arguments in the Lua stack, getting

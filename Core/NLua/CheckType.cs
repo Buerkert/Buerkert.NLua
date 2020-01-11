@@ -72,6 +72,7 @@ namespace NLua
 			extractValues.Add(GetExtractDictionaryKey(typeof(char[])), new ExtractValue (GetAsCharArray));
 			extractValues.Add(GetExtractDictionaryKey(typeof(LuaFunction)), new ExtractValue(GetAsFunction));
 			extractValues.Add(GetExtractDictionaryKey(typeof(LuaTable)), new ExtractValue(GetAsTable));
+			extractValues.Add(typeof(Dictionary<object, object>), GetAsDictionary);
 			extractValues.Add(GetExtractDictionaryKey(typeof(LuaUserData)), new ExtractValue(GetAsUserdata));
 			extractNetObject = new ExtractValue (GetAsNetObject);		
 		}
@@ -170,7 +171,9 @@ namespace NLua
 					return extractValues [extractKey];
 			} else if (paramType == typeof(LuaFunction)) {
 				if (luatype == LuaTypes.Function || luatype == LuaTypes.Nil)
-					return extractValues [extractKey];
+					return extractValues[extractKey];
+			} else if (paramType == typeof(Dictionary<object, object>) && luatype == LuaTypes.Table) {
+				return extractValues[extractKey];
 			} else if (typeof(Delegate).IsAssignableFrom (paramType) && luatype == LuaTypes.Function)
 				return new ExtractValue (new DelegateGenerator (translator, paramType).ExtractGenerated);
 			else if (paramType.IsInterface() && luatype == LuaTypes.Table)
@@ -344,6 +347,11 @@ namespace NLua
 		private object GetAsFunction (LuaState luaState, int stackPos)
 		{
 			return translator.GetFunction (luaState, stackPos);
+		}
+
+		public Dictionary<object, object> GetAsDictionary(LuaState luaState, int stackPos)
+		{
+			return translator.GetDictionary(luaState, stackPos);
 		}
 
 		private object GetAsUserdata (LuaState luaState, int stackPos)
