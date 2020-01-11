@@ -1,0 +1,36 @@
+name: Deploy
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 2.2.108
+    - name: Setup Nuget.exe
+      uses: warrenbuckley/Setup-Nuget@v1
+    - name: Checkout submodules
+      uses: textbook/git-checkout-submodule-action@2.0.0
+    - name: Nuget restore
+      run: nuget restore NLua.sln
+    - name: Build with dotnet
+      run: dotnet msbuild NLua.sln -p:Configuration=Release -r
+    - name: Pack nuget package
+      run: nuget pack NLua.nuspec -OutputDirectory Run\Release\net45
+    - name: Add private GitHub registry to NuGet
+      run: nuget sources add -name "GPR" -Source https://nuget.pkg.github.com/Buerkert/index.json -Username Buerkert -Password ${{ secrets.GITHUB_TOKEN }}
+    - name: Push generated package to GitHub registry
+      run: nuget push Run\Release\net45\*.nupkg -Source "GPR"
+    - name: Upload NLua artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: NLua
+        path: Run\Release\net45
