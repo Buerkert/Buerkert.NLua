@@ -2477,6 +2477,23 @@ namespace NLuaTest
 		}
 
 		[Test]
+		public void PassDictionaryToLua()
+		{
+			using (var lua = new Lua())
+			{
+				string name = "MethodWithDictionary";
+				var testClass = new TestClass();
+				lua.RegisterFunction(name, testClass, typeof(TestClass).GetMethod(nameof(TestClass.MethodWithDictionary)));
+				lua.DoString($@"param = {{""test"",""testValue""}}
+							 x = {name}(param)"
+				);
+				LuaTable result = lua.GetTable("x");
+				Assert.AreEqual("test", result[1]);
+				Assert.AreEqual("testValue", result[2]);
+			}
+		}
+
+		[Test]
 		public void TestCallMethodWithParams2 ()
 		{
 			using (var l = new Lua ()) {
