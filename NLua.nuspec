@@ -20,6 +20,6 @@
     <file src="Run\Release\net45\x64\lua52.dll" target="runtimes\win-x64\native\lua52.dll" />
     <file src="Run\Release\net45\x86\lua52.dll" target="runtimes\win-x86\native\lua52.dll" />
     <file src="NLua.targets" target="build\net45\Buerkert.NLua.targets" />
-    <file src="COPYRIGHT" target="LICENSE.txt" />
+    <file src="LICENSE.txt" target="LICENSE.txt" />
   </files>
 </package>
