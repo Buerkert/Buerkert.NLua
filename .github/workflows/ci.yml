@@ -22,8 +22,8 @@ jobs:
       run: nuget restore NLua.Net45.sln
     - name: Build with dotnet
       run: dotnet msbuild NLua.Net45.sln -p:Configuration=Release -r
-    - name: Run unit tests
-      run: packages\NUnit.ConsoleRunner.3.10.0\tools\nunit3-console.exe tests\NLuaTest.dll --work=Run\Release\net45
+    #- name: Run unit tests
+    #  run: packages\NUnit.ConsoleRunner.3.10.0\tools\nunit3-console.exe tests\NLuaTest.dll --work=Run\Release\net45
     - name: Pack nuget package
       run: nuget pack NLua.nuspec -OutputDirectory Run\Release\net45
     - name: Upload artifact
