@@ -1,6 +1,6 @@
 [submodule "Core/KeraLua"]
 	path = Core/KeraLua
-	url = git://github.com/Buerkert/Buerkert.KeraLua.git
+	url = https://github.com/Buerkert/Buerkert.KeraLua.git
 [submodule "tests/LuaTests"]
 	path = tests/LuaTests
-	url = git://github.com/NLua/LuaTests.git
+	url = https://github.com/NLua/LuaTests.git
