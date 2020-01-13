@@ -12,6 +12,9 @@
     <summary>NLua allow use Lua from C#, using Windows.</summary>
     <copyright>Copyright © Buerkert 2020</copyright>
     <tags>lua nlua keralua</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.5" />
+    </dependencies>
   </metadata>
   <files>
     <file src="Run\Release\net45\NLua.dll" target="lib\net45" />
