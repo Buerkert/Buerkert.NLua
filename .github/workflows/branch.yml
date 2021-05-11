@@ -24,7 +24,7 @@ jobs:
       env:
         NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
     - name: echo
-      run: echo ${{ env.NUGET_URL }}
+      run: echo "nuget url:${{ env.NUGET_URL }}"
     - name: Build with dotnet
       run: dotnet build -c Release
     - name: Run unit tests
