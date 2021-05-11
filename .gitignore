@@ -16,6 +16,8 @@ tests/KopiLua.dll
 tests/NLua.dll
 tests/NLuaTest.dll
 tests/nunit.framework.dll
+TestPackages
+packages
 
 #ignore thumbnails created by windows
 Thumbs.db
@@ -64,3 +66,7 @@ Makefile.in
 /install-sh
 /missing
 /config.status
+
+packages/*
+.vs
+.idea

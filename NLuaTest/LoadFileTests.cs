@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using NLua;
 
 using NLuaTest.Mock;
@@ -26,16 +27,23 @@ namespace LoadFileTests
 	#endif
 	public class LoadLuaFile
 	{
+
+        [OneTimeSetUp]
+        public void Init()
+        {
+			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
+        }
+
 		/*
         * Tests capturing an exception
         */
 		[Test]
 		public void TestLoadFile ()
-		{
+        {
 			using (Lua lua = new Lua ()) {
 				lua.LoadCLRPackage ();
 
-				lua.DoFile ("test.lua");
+				lua.DoFile ("scripts/test.lua");
 
 				int width = (int)(double)lua ["width"];
 				int height = (int)(double)lua ["height"];
@@ -65,9 +73,9 @@ namespace LoadFileTests
 			using (Lua lua = new Lua ()) {
 				lua.LoadCLRPackage ();
 				if (IntPtr.Size == 4)
-					lua.DoFile ("test_32.luac");
+					lua.DoFile ("scripts/test_32.luac");
 				else
-					lua.DoFile ("test_64.luac");
+					lua.DoFile ("scripts/test_64.luac");
 
 				int width = (int)(double)lua ["width"];
 				int height = (int)(double)lua ["height"];
