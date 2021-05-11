@@ -20,11 +20,9 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '5.0.x'
-        source-url: ${{ env.NUGET_URL }}
+        source-url: https://nuget.pkg.github.com/Buerkert/index.json
       env:
         NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-    - name: echo
-      run: echo "nuget url:${{ env.NUGET_URL }}"
     - name: Build with dotnet
       run: dotnet build -c Release
     - name: Run unit tests
