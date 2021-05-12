@@ -41,9 +41,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Buerkert.KeraLua" Version="1.3.0-build.3" />
+    <PackageReference Include="Buerkert.KeraLua" Version="1.3.0-build.9" />
     <PackageReference Include="System.Reflection.Emit" Version="4.3.0" />
-    <!--<PackageReference Include="Buerkert.KeraLua" Version="1.3.0-build.3">-->
+    <!--<PackageReference Include="Buerkert.KeraLua" Version="1.3.0-build.9">-->
       <!--<PrivateAssets>none</PrivateAssets>-->
       <!--<IncludeAssets>build;buildMultitargeting;buildTransitive</IncludeAssets>-->
     <!--</PackageReference>-->
