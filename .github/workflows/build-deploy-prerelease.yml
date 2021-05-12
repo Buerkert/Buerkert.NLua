@@ -1,10 +1,9 @@
-name: branch
+name: build-deploy-prerelease
 
 on:
   push:
     branches:
-      - '*'
-      - '!master'
+      - master
 
 jobs:
   build:
@@ -24,9 +23,11 @@ jobs:
       env:
         NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
     - name: Build with dotnet
-      run: dotnet build -c Release
+      run: dotnet build -c Release --version-suffix build.${{ github.run_number }}
     - name: Run unit tests
       run: dotnet test
+    - name: Push generated package to GitHub registry (symbols not supported yet)
+      run: dotnet nuget push NLua\bin\Release\Buerkert.NLua.*.nupkg --skip-duplicate --no-symbols true
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:

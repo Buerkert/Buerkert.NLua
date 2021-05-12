@@ -1,0 +1,15 @@
+version: 2
+registries:
+  BuerkertGithubPackageRegistry:
+    type: nuget-feed
+    url: https://nuget.pkg.github.com/buerkert/index.json
+    username: "${{secrets.BUERKERTGITHUBPACKAGEREGISTRY_USERNAME}}"
+    password: "${{secrets.BUERKERTGITHUBPACKAGEREGISTRY_PASSWORD}}"
+updates:
+  - package-ecosystem: nuget
+    directory: "/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 10
+    registries:
+    - BuerkertGithubPackageRegistry
