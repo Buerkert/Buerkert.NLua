@@ -22,8 +22,10 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <PackageTags>lua nlua</PackageTags>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <!-- wait for https://github.com/NuGet/Home/issues/10791 or just add pdb to main package-->
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <!--<IncludeSymbols>true</IncludeSymbols>-->
+    <!--<SymbolPackageFormat>snupkg</SymbolPackageFormat>-->
   </PropertyGroup>
   
   <ItemGroup>
