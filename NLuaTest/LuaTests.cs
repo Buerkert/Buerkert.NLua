@@ -634,6 +634,23 @@ namespace NLuaTest
 				Assert.AreNotEqual (null, c);
 			}
 		}
+		
+		[Test]
+		public void TestMultipleReturnParameters ()
+		{
+			using (Lua lua = new Lua ()) {
+				TestClass t1 = new TestClass ();
+				lua ["netobj"] = t1;
+				lua.DoString ("a,b,c=netobj:returnValMutiple(2)");
+				int a = (int)lua.GetNumber ("a");
+				string b = (string)lua.GetString ("b");
+				string c = (string)lua.GetString ("c");
+				Assert.AreEqual (2, a);
+				Assert.AreNotEqual (null, b);
+				Assert.AreNotEqual (null, c);
+			}
+		}
+
 
 		[Test]
 		public void TestLoadStringLeak ()

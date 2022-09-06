@@ -26,6 +26,7 @@ using System;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using NLua.Exceptions;
 using NLua.Extensions;
 
@@ -287,7 +288,23 @@ namespace NLua.Method
 						if (_LastCalledMethod.cachedMethod.IsConstructor)
 							_Translator.Push (luaState, ((ConstructorInfo)_LastCalledMethod.cachedMethod).Invoke (_LastCalledMethod.args));
 						else
-							_Translator.Push (luaState, _LastCalledMethod.cachedMethod.Invoke (targetObject, _LastCalledMethod.args));
+						{
+							var result = _LastCalledMethod.cachedMethod.Invoke(targetObject, _LastCalledMethod.args);
+							if (result is ITuple tuple)
+							{
+								for(var i = 0; i < tuple.Length; i++)
+								{
+									nReturnValues++;
+									_Translator.Push(luaState, tuple[i]);
+								}
+								nReturnValues--;
+							}
+							else
+							{
+								_Translator.Push (luaState, result);
+							}
+						}
+							
 					}
 				} catch (TargetInvocationException e) {
 					if (_Translator.interpreter.UseTraceback) e.GetBaseException().Data["Traceback"] = _Translator.interpreter.GetDebugTraceback();
@@ -298,9 +315,10 @@ namespace NLua.Method
 			}
 
 			// Pushes out and ref return values
-			for (int index = 0; index < _LastCalledMethod.outList.Length; index++) {
+			foreach (var t in _LastCalledMethod.outList)
+			{
 				nReturnValues++;
-				_Translator.Push (luaState, _LastCalledMethod.args [_LastCalledMethod.outList [index]]);
+				_Translator.Push (luaState, _LastCalledMethod.args [t]);
 			}
 
 			//by isSingle 2010-09-10 11:26:31 

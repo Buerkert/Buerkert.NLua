@@ -29,6 +29,8 @@ using System.Reflection;
 using System.Diagnostics;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using NLua.Method;
 using NLua.Exceptions;
 using NLua.Extensions;
@@ -973,34 +975,31 @@ namespace NLua
 		{
 			if (o == null)
 				LuaLib.LuaPushNil (luaState);
-			else if (o is sbyte || o is byte || o is short || o is ushort ||
-			         o is int || o is uint || o is long || o is float ||
-			         o is ulong || o is decimal || o is double) {
+			else if (o is sbyte or byte or short or ushort or int or uint or long or float or ulong or decimal or double) {
 				double d = Convert.ToDouble (o);
 				LuaLib.LuaPushNumber (luaState, d);
-			} else if (o is char) {
-				double d = (char)o;
+			} else if (o is char c) {
+				double d = c;
 				LuaLib.LuaPushNumber (luaState, d);
-			} else if (o is string) {
-				string str = (string)o;
+			} else if (o is string str) {
 				LuaLib.LuaPushString (luaState, str);
 			} else if (o is bool) {
 				bool b = (bool)o;
 				LuaLib.LuaPushBoolean (luaState, b);
 			} else if (IsILua (o))
 				(((ILuaGeneratedType)o).LuaInterfaceGetLuaTable ()).Push (luaState);
-			else if (o is LuaTable)
-				((LuaTable)o).Push (luaState);
+			else if (o is LuaTable table)
+				table.Push (luaState);
 			else if (o is Dictionary<object, object> dictionary)
 				PushDictionaryAsTable(luaState, dictionary);
-			else if (o is LuaNativeFunction)
-				PushFunction (luaState, (LuaNativeFunction)o);
-			else if (o is LuaFunction)
-				((LuaFunction)o).Push (luaState);
+			else if (o is LuaNativeFunction nativeFunction)
+				PushFunction (luaState, nativeFunction);
+			else if (o is LuaFunction function)
+				function.Push (luaState);
 			else
 				PushObject (luaState, o, "luaNet_metatable");
 		}
-
+		
 
 		public void PushDictionaryAsTable<A, B>(LuaState luaState, Dictionary<A, B> dict)
 		{

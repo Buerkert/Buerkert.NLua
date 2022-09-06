@@ -444,7 +444,13 @@ namespace NLuaTest.Mock
 
 			return arg;
 		}
-
+		
+		
+		public (int arg, string arg2, string arg3) returnValMutiple (int arg)
+		{
+			return (arg,Guid.NewGuid ().ToString (),Guid.NewGuid ().ToString ());
+		}
+		
 		public int callDelegate1 (TestDelegate1 del)
 		{
 			return del (2, 3);
