@@ -8,7 +8,7 @@
             original Copyright © Vinicius Jarina 2019
             modified by Copyright (c) Buerkert Fluid Control Systems 2021
         </Copyright>
-        <VersionPrefix>1.4.0</VersionPrefix>
+        <VersionPrefix>1.5.0</VersionPrefix>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)' == 'Release'">
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
