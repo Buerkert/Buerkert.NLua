@@ -16,8 +16,8 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: |
-          5.0.x
           6.0.x
+          7.0.x
         config-file: nuget.config
         source-url: https://nuget.pkg.github.com/Buerkert/index.json
       env:
