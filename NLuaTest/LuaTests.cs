@@ -22,7 +22,7 @@ using NUnit.Framework;
 
 namespace NLuaTest
 {
-	public class parameter
+	public class Parameter
 	{
 		public string field1 = "parameter-field1";
 	}
@@ -30,14 +30,14 @@ namespace NLuaTest
 	#if MONOTOUCH
 	[Preserve (AllMembers = true)]
 	#endif
-	public class master
+	public class Master
 	{
 		public static string read()
 		{
 			return "test-master";
 		}
 
-		public static string read( parameter test )
+		public static string read( Parameter test )
 		{
 			return test.field1;
 		}
@@ -46,7 +46,7 @@ namespace NLuaTest
 	#if MONOTOUCH
 	[Preserve (AllMembers = true)]
 	#endif
-	public class testClass : master 
+	public class testClass : Master 
 	{
 		public String strData;
 		public int intData;
