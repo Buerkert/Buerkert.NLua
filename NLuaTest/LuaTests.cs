@@ -2484,7 +2484,7 @@ namespace NLuaTest
 				l.LoadCLRPackage ();
 				l.DoString (" import ('NLuaTest') ");
 				l.DoString (@"
-					p=parameter()
+					p=Parameter()
 					r1 = testClass.read(p)     -- is not working. it is also not working if the method in base class has two parameters instead of one
 					r2 = testClass.read(1)     -- is working				
 				");
