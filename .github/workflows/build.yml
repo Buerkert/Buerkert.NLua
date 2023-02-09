@@ -16,9 +16,9 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2.3.4
+      uses: actions/checkout@v3
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: |
           6.0.x
@@ -32,7 +32,7 @@ jobs:
     - name: Run unit tests
       run: dotnet test
     - name: Upload artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: NLua
         path: NLua\bin\Release\*nupkg
