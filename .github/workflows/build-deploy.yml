@@ -21,11 +21,11 @@ jobs:
       env:
         NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
     - name: Build with dotnet
-      run: dotnet build -c Release
+      run: dotnet build -c Release --version-suffix ""
     - name: Run unit tests
       run: dotnet test
     - name: Pack
-      run: dotnet pack -c Release -o package
+      run: dotnet pack -c Release --version-suffix "" -o package
     - name: Push generated package to GitHub registry
       run: dotnet nuget push package\Buerkert.NLua.*.nupkg --api-key ${{secrets.GITHUB_TOKEN}}
     - name: Upload artifact
