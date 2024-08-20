@@ -21,7 +21,7 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
         <PackageTags>lua nlua</PackageTags>
-        <DebugType>Embedded</DebugType> <!-- Embedd debug into the dll itself because github packages does not provide a symbol server -->
+        <DebugType>embedded</DebugType> <!-- Embedd debug into the dll itself because github packages does not provide a symbol server -->
 <!--        <IncludeSymbols>true</IncludeSymbols>-->
 <!--        <SymbolPackageFormat>snupkg</SymbolPackageFormat>-->
     </PropertyGroup>
@@ -36,6 +36,5 @@
     <ItemGroup>
         <PackageReference Include="Buerkert.KeraLua" Version="1.5.0" />
         <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
     </ItemGroup>
 </Project>
