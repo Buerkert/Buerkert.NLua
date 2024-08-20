@@ -12,7 +12,7 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-    - name: Setup .NET Core
+    - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.x
@@ -24,10 +24,12 @@ jobs:
       run: dotnet build -c Release
     - name: Run unit tests
       run: dotnet test
+    - name: Pack
+      run: dotnet pack -c Release -o package
     - name: Push generated package to GitHub registry
-      run: dotnet nuget push NLua\bin\Release\Buerkert.NLua.*.nupkg
+      run: dotnet nuget push package\Buerkert.NLua.*.nupkg --api-key ${{secrets.GITHUB_TOKEN}}
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: NLua
-        path: NLua\bin\Release\*nupkg
+        path: package\*nupkg
