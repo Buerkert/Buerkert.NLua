@@ -22,7 +22,7 @@
         <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
         <PackageTags>lua nlua</PackageTags>
         <DebugType>Embedded</DebugType> <!-- Embedd debug into the dll itself because github packages does not provide a symbol server -->
-        <IncludeSymbols>true</IncludeSymbols>
+<!--        <IncludeSymbols>true</IncludeSymbols>-->
 <!--        <SymbolPackageFormat>snupkg</SymbolPackageFormat>-->
     </PropertyGroup>
     <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
