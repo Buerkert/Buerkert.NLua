@@ -21,9 +21,9 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
         <PackageTags>lua nlua</PackageTags>
-<!--        <DebugType>Embedded</DebugType> &lt;!&ndash; Embed source files in the PDB because github packages does not provide a symbol server &ndash;&gt;-->
+        <DebugType>Embedded</DebugType> <!-- Embedd debug into the dll itself because github packages does not provide a symbol server -->
         <IncludeSymbols>true</IncludeSymbols>
-        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+<!--        <SymbolPackageFormat>snupkg</SymbolPackageFormat>-->
     </PropertyGroup>
     <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
         <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
