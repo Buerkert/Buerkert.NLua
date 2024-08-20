@@ -50,10 +50,5 @@ namespace NLua.Exceptions
 		{
 		}
 
-#if !SILVERLIGHT && !NETFX_CORE
-		protected LuaException (SerializationInfo info, StreamingContext context) : base(info, context)
-		{
-		}
-#endif
 	}
 }

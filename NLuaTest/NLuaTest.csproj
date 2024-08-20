@@ -1,12 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+    <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
-    <PackageReference Include="NUnit" Version="3.13.3" />
-    <PackageReference Include="NUnit.ConsoleRunner" Version="3.17.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.*" />
+    <PackageReference Include="NUnit" Version="3.*" />
+    <PackageReference Include="NUnit.ConsoleRunner" Version="3.*" />
+    <PackageReference Include="NUnit.Analyzers" Version="4.*" PrivateAssets="All" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.*" />
   </ItemGroup>
   <ItemGroup>
     <None Include="core\*.lua" CopyToOutputDirectory="PreserveNewest" />

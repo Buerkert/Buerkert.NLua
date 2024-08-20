@@ -53,17 +53,20 @@ namespace LoadFileTests
 				object[] res = func.Call (12, 34);
 				int x = (int)(double)res [0];
 				int y = (int)(double)res [1];
-				//function func(x,y)
-				//	return x,x+y
-				//end
+                Assert.Multiple(() =>
+                {
+                    //function func(x,y)
+                    //	return x,x+y
+                    //end
 
-				Assert.AreEqual (100, width);
-				Assert.AreEqual (200, height);
-				Assert.AreEqual ("Hello World!", message);
-				Assert.AreEqual (20, color_g);
-				Assert.AreEqual (12, x);
-				Assert.AreEqual (46, y);
-			}
+                    Assert.That(width, Is.EqualTo(100));
+                    Assert.That(height, Is.EqualTo(200));
+                    Assert.That(message, Is.EqualTo("Hello World!"));
+                    Assert.That(color_g, Is.EqualTo(20));
+                    Assert.That(x, Is.EqualTo(12));
+                    Assert.That(y, Is.EqualTo(46));
+                });
+            }
 		}
 
 
@@ -85,17 +88,20 @@ namespace LoadFileTests
 				object[] res = func.Call (12, 34);
 				int x = (int)(double)res [0];
 				int y = (int)(double)res [1];
-				//function func(x,y)
-				//	return x,x+y
-				//end
+                Assert.Multiple(() =>
+                {
+                    //function func(x,y)
+                    //	return x,x+y
+                    //end
 
-				Assert.AreEqual (100, width);
-				Assert.AreEqual (200, height);
-				Assert.AreEqual ("Hello World!", message);
-				Assert.AreEqual (20, color_g);
-				Assert.AreEqual (12, x);
-				Assert.AreEqual (46, y);
-			}
+                    Assert.That(width, Is.EqualTo(100));
+                    Assert.That(height, Is.EqualTo(200));
+                    Assert.That(message, Is.EqualTo("Hello World!"));
+                    Assert.That(color_g, Is.EqualTo(20));
+                    Assert.That(x, Is.EqualTo(12));
+                    Assert.That(y, Is.EqualTo(46));
+                });
+            }
 		}
 	}
 }

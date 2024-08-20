@@ -12,13 +12,11 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: |
-          6.0.x
-          7.0.x
+        dotnet-version: 8.x 
         config-file: nuget.config
         source-url: https://nuget.pkg.github.com/Buerkert/index.json
       env:
@@ -30,7 +28,7 @@ jobs:
     - name: Push generated package to GitHub registry
       run: dotnet nuget push NLua\bin\Release\Buerkert.NLua.*.nupkg
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: NLua
         path: NLua\bin\Release\*nupkg

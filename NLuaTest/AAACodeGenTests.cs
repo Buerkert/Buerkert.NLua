@@ -29,7 +29,7 @@ namespace NLuaTest
 				lua.DoString ("test=TestClass()");
 				lua.DoString ("a=test:callDelegate1(func)");
 				int a = (int)lua.GetNumber ("a");
-				Assert.AreEqual (5, a);
+                Assert.That(a, Is.EqualTo(5));
 				//Console.WriteLine("delegate returned: "+a);
 			}
 		}
@@ -48,7 +48,7 @@ namespace NLuaTest
 				lua.DoString ("test=TestClass()");
 				lua.DoString ("a=test:callDelegate2(func)");
 				int a = (int)lua.GetNumber ("a");
-				Assert.AreEqual (6, a);
+                Assert.That(a, Is.EqualTo(6));
 				//Console.WriteLine("delegate returned: "+a);
 			}
 		}
@@ -67,7 +67,7 @@ namespace NLuaTest
 				lua.DoString ("test=TestClass()");
 				lua.DoString ("a=test:callDelegate3(func)");
 				int a = (int)lua.GetNumber ("a");
-				Assert.AreEqual (5, a);
+                Assert.That(a, Is.EqualTo(5));
 				//Console.WriteLine("delegate returned: "+a);
 			}
 		}
@@ -86,7 +86,7 @@ namespace NLuaTest
 				lua.DoString ("test=TestClass()");
 				lua.DoString ("a=test:callDelegate4(func)");
 				int a = (int)lua.GetNumber ("a");
-				Assert.AreEqual (5, a);
+                Assert.That(a, Is.EqualTo(5));
 				//Console.WriteLine("delegate returned: "+a);
 			}
 		}
@@ -104,7 +104,7 @@ namespace NLuaTest
 				lua.DoString ("function func(x,y) return x.testval+y.testval; end");
 				lua.DoString ("a=test:callDelegate5(func)");
 				int a = (int)lua.GetNumber ("a");
-				Assert.AreEqual (5, a);
+                Assert.That(a, Is.EqualTo(5));
 				//Console.WriteLine("delegate returned: "+a);
 			}
 		}
@@ -123,7 +123,7 @@ namespace NLuaTest
 				lua.DoString ("test=TestClass()");
 				lua.DoString ("a=test:callDelegate6(func)");
 				int a = (int)lua.GetNumber ("a");
-				Assert.AreEqual (6, a);
+                Assert.That(a, Is.EqualTo(6));
 				//Console.WriteLine("delegate returned: "+a);
 			}
 		}
@@ -141,7 +141,7 @@ namespace NLuaTest
 				lua.DoString ("function func(x,y) return TestClass(x+y.testval); end");
 				lua.DoString ("a=test:callDelegate7(func)");
 				int a = (int)lua.GetNumber ("a");
-				Assert.AreEqual (5, a);
+                Assert.That(a, Is.EqualTo(5));
 				//Console.WriteLine("delegate returned: "+a);
 			}
 		}
@@ -163,7 +163,7 @@ namespace NLuaTest
 				lua.DoString ("test=TestClass()");
 				lua.DoString ("a=test:callInterface1(itest)");
 				int a = (int)lua.GetNumber ("a");
-				Assert.AreEqual (5, a);
+                Assert.That(a, Is.EqualTo(5));
 				//Console.WriteLine("interface returned: "+a);
 			}
 		}
@@ -184,7 +184,7 @@ namespace NLuaTest
 				lua.DoString ("a=TestClass.callOverridable(test,2,3)");
 				int a = (int)lua.GetNumber ("a");
 				lua.DoString ("luanet.free_object(test)");
-				Assert.AreEqual (6, a);
+                Assert.That(a, Is.EqualTo(6));
 			}
 		}
 	}

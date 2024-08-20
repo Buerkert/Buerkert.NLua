@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+        <TargetFramework>net8.0</TargetFramework>
         <AssemblyTitle>Buerkert.NLua</AssemblyTitle>
         <Product>Buerkert.NLua</Product>
         <Company>Buerkert Werke GmbH &amp; Co. KG</Company>
@@ -15,14 +15,17 @@
         <PackageId>Buerkert.NLua</PackageId>
         <Description>NLua allow use Lua from C#, using Windows.</Description>
         <PackageProjectUrl>https://github.com/Buerkert/Buerkert.NLua</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/Buerkert/Buerkert.NLua.git</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
         <PackageIcon>NLua.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
         <PackageTags>lua nlua</PackageTags>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     </PropertyGroup>
     <ItemGroup>
         <Content Include="..\README.md" Pack="true" PackagePath="" />

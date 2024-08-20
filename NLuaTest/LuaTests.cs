@@ -185,9 +185,12 @@ namespace NLuaTest
 				lua.DoString ("err,errMsg=pcall(test.exceptionMethod,test)");
 				bool err = (bool)lua ["err"];
 				Exception errMsg = (Exception)lua ["errMsg"];
-				Assert.AreEqual (false , err);
-				Assert.AreNotEqual (null, errMsg.InnerException);
-				Assert.AreEqual ("exception test", errMsg.InnerException.Message);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(err, Is.EqualTo(false));
+                    Assert.That(errMsg.InnerException, Is.Not.EqualTo(null));
+                });
+                Assert.That(errMsg.InnerException.Message, Is.EqualTo("exception test"));
 			}
 		}
 
@@ -205,9 +208,9 @@ namespace NLuaTest
 				lua.DoString ("luanet.load_assembly('NLuaTest')");
 				lua.DoString ("TestClass=luanet.import_type('NLuaTest.Mock.TestClass')");
 				lua.DoString ("b = TestClass():TestLuaFunction(funcObject)[0]");
-				Assert.AreEqual (3, lua ["b"]);
+                Assert.That(lua["b"], Is.EqualTo(3));
 				lua.DoString ("a = TestClass():TestLuaFunction(nil)");
-				Assert.AreEqual (null, lua ["a"]);
+                Assert.That(lua["a"], Is.EqualTo(null));
 			}
 		}
 
@@ -225,11 +228,11 @@ namespace NLuaTest
 
 				try {
 					lua.DoString ("test:exceptionMethod()");
-					//failed
-                    Assert.AreEqual(false, true);
+                    //failed
+                    Assert.Fail();
 				} catch (Exception) {
-					//passed
-					Assert.AreEqual (true, true);
+                    //passed
+                    Assert.Pass();
 				}
 			}
 		}
@@ -247,10 +250,10 @@ namespace NLuaTest
 				lua.DoString ("TestClass=luanet.import_type('NLuaTest.Mock.TestClass')");
 				lua.DoString ("test=TestClass()");
 				lua.DoString ("val=test.NullableBool");
-				Assert.AreEqual (null, (object)lua ["val"]);
+                Assert.That((object)lua["val"], Is.EqualTo(null));
 				lua.DoString ("test.NullableBool = true");
 				lua.DoString ("val=test.NullableBool");
-				Assert.AreEqual (true, (bool)lua ["val"]);
+                Assert.That((bool)lua["val"], Is.EqualTo(true));
 			}
 		}
 
@@ -268,7 +271,7 @@ namespace NLuaTest
 				lua.DoString ("struct=TestStruct(2)");
 				lua.DoString ("test.Struct = struct");
 				lua.DoString ("val=test.Struct.val");
-				Assert.AreEqual (2.0d, (double)lua ["val"]);
+                Assert.That((double)lua["val"], Is.EqualTo(2.0d));
 			}
 		}
 
@@ -283,7 +286,7 @@ namespace NLuaTest
 				lua.DoString ("luanet.load_assembly('NLuaTest')");
 				lua.DoString ("TestStruct=luanet.import_type('NLuaTest.Mock.TestStruct')");
 				lua.DoString ("struct=TestStruct()");
-				Assert.AreEqual (new TestStruct(), (TestStruct)lua ["struct"]);
+                Assert.That((TestStruct)lua["struct"], Is.EqualTo(new TestStruct()));
 			}
 		}
 
@@ -297,7 +300,7 @@ namespace NLuaTest
                 lua.DoString("struct1=TestStruct(0)");
                 lua.DoString("struct2=TestStruct(0)");
                 lua.DoString("struct2.val=1");
-                Assert.AreEqual(0, (double)lua["struct1.val"]);
+                Assert.That((double)lua["struct1.val"], Is.EqualTo(0));
             }
         }
 
@@ -310,8 +313,11 @@ namespace NLuaTest
                 lua.DoString("TestEnum=luanet.import_type('NLuaTest.Mock.TestEnum')");
                 lua.DoString("enum1=TestEnum.ValueA");
                 lua.DoString("enum2=TestEnum.ValueB");
-                Assert.AreEqual(true, (bool)lua.DoString("return enum1 ~= enum2")[0]);
-                Assert.AreEqual(false, (bool)lua.DoString("return enum1 == enum2")[0]);
+                Assert.Multiple(() =>
+                {
+                    Assert.That((bool)lua.DoString("return enum1 ~= enum2")[0], Is.EqualTo(true));
+                    Assert.That((bool)lua.DoString("return enum1 == enum2")[0], Is.EqualTo(false));
+                });
             }
         }
 
@@ -395,7 +401,7 @@ namespace NLuaTest
 				while (completed < iterations && !failureDetected)
 					Thread.Sleep (50);
 
-				Assert.AreEqual (false, failureDetected);
+                Assert.That(failureDetected, Is.EqualTo(false));
 			}
 		}
 
@@ -411,11 +417,11 @@ namespace NLuaTest
 				try {
 					lua.DoString ("test:_PrivateMethod()");
 				} catch {
-					Assert.AreEqual (true, true);
+                    Assert.Pass();
 					return;
 				}
 
-                Assert.AreEqual(true, false);
+                Assert.Fail();
 			}
 		}
 
@@ -455,7 +461,7 @@ namespace NLuaTest
 				lua.DoString ("a=TestClass.callOverridable(test,2,3)");
 				int a = (int)lua.GetNumber ("a");
 				lua.DoString ("luanet.free_object(test)");
-				Assert.AreEqual (6, a);
+                Assert.That(a, Is.EqualTo(6));
 			}
 		}
 
@@ -477,7 +483,7 @@ namespace NLuaTest
 				lua.DoString ("a=test.testval");
 				int a = (int)lua.GetNumber ("a");
 				lua.DoString ("luanet.free_object(test)");
-				Assert.AreEqual (3, a);
+                Assert.That(a, Is.EqualTo(3));
 				//Console.WriteLine("interface returned: "+a);
 			}
 		}
@@ -539,11 +545,11 @@ namespace NLuaTest
 				try {
 					//Cause the event to be fired
 					entity.Click ();
-					//failed
-                    Assert.AreEqual(true, false);
+                    //failed
+                    Assert.Fail();
 				} catch (LuaException) {
-					//passed
-					Assert.AreEqual (true, true);
+                    //passed
+                    Assert.Pass();
 				}
 			}
 		}
@@ -555,7 +561,7 @@ namespace NLuaTest
 				try {
 					lua.DoString ("thiswillthrowanerror", "MyChunk");
 				} catch (Exception e) {
-					Assert.AreEqual (true, e.Message.StartsWith ("[string \"MyChunk\"]"));
+                    Assert.That(e.Message.StartsWith("[string \"MyChunk\"]"), Is.EqualTo(true));
 				}
 			}
 		}
@@ -587,10 +593,13 @@ namespace NLuaTest
 				} catch {
 				}
 
-				Assert.AreEqual (true, classWithGenericMethod.GenericMethodSuccess);
-				Assert.AreEqual (true, classWithGenericMethod.Validate<double> (100)); //note the gotcha: numbers are all being passed to generic methods as doubles
+                Assert.Multiple(() =>
+                {
+                    Assert.That(classWithGenericMethod.GenericMethodSuccess, Is.EqualTo(true));
+                    Assert.That(classWithGenericMethod.Validate<double>(100), Is.EqualTo(true)); //note the gotcha: numbers are all being passed to generic methods as doubles
+                });
 
-				try {
+                try {
 					lua.DoString ("luanet.load_assembly('NLuaTest')");
 					lua.DoString ("TestClass=luanet.import_type('NLuaTest.Mock.TestClass')");
 					lua.DoString ("test=TestClass(56)");
@@ -598,9 +607,12 @@ namespace NLuaTest
 				} catch {
 				}
 
-				Assert.AreEqual (true, classWithGenericMethod.GenericMethodSuccess);
-				Assert.AreEqual (56, (classWithGenericMethod.PassedValue as TestClass).val);
-			}
+                Assert.Multiple(() =>
+                {
+                    Assert.That(classWithGenericMethod.GenericMethodSuccess, Is.EqualTo(true));
+                    Assert.That((classWithGenericMethod.PassedValue as TestClass).val, Is.EqualTo(56));
+                });
+            }
 		}
 
 		[Test]
@@ -629,10 +641,13 @@ namespace NLuaTest
 				int a = (int)lua.GetNumber ("a");
 				string b = (string)lua.GetString ("b");
 				string c = (string)lua.GetString ("c");
-				Assert.AreEqual (2, a);
-				Assert.AreNotEqual (null, b);
-				Assert.AreNotEqual (null, c);
-			}
+                Assert.Multiple(() =>
+                {
+                    Assert.That(a, Is.EqualTo(2));
+                    Assert.That(b, Is.Not.EqualTo(null));
+                    Assert.That(c, Is.Not.EqualTo(null));
+                });
+            }
 		}
 		
 		[Test]
@@ -645,10 +660,13 @@ namespace NLuaTest
 				int a = (int)lua.GetNumber ("a");
 				string b = (string)lua.GetString ("b");
 				string c = (string)lua.GetString ("c");
-				Assert.AreEqual (2, a);
-				Assert.AreNotEqual (null, b);
-				Assert.AreNotEqual (null, c);
-			}
+                Assert.Multiple(() =>
+                {
+                    Assert.That(a, Is.EqualTo(2));
+                    Assert.That(b, Is.Not.EqualTo(null));
+                    Assert.That(c, Is.Not.EqualTo(null));
+                });
+            }
 		}
 
 
@@ -688,11 +706,11 @@ namespace NLuaTest
 			using (Lua lua = new Lua ()) {
 				lua.RegisterFunction ("func1", null, typeof(TestClass2).GetMethod ("func"));
 				object[] vals1 = lua.GetFunction ("func1").Call (2, 3);
-				Assert.AreEqual (5.0f, Convert.ToSingle (vals1 [0]));
+                Assert.That(Convert.ToSingle(vals1[0]), Is.EqualTo(5.0f));
 				TestClass2 obj = new TestClass2 ();
 				lua.RegisterFunction ("func2", obj, typeof(TestClass2).GetMethod ("funcInstance"));
 				vals1 = lua.GetFunction ("func2").Call (2, 3);
-				Assert.AreEqual (5.0f, Convert.ToSingle (vals1 [0]));
+                Assert.That(Convert.ToSingle(vals1[0]), Is.EqualTo(5.0f));
 			}
 		}
 	
@@ -708,14 +726,14 @@ namespace NLuaTest
 				lua.DoString ("TestClass=luanet.import_type('NLuaTest.Mock.TestClass')");
 				lua.DoString ("test=TestClass()");
 				lua.DoString ("a = test:NullableMethod(nil)");
-				Assert.AreEqual (null, lua ["a"]);
+                Assert.That(lua["a"], Is.EqualTo(null));
 				lua ["timeVal"] = TimeSpan.FromSeconds (5);
 				lua.DoString ("b = test:NullableMethod(timeVal)");
-				Assert.AreEqual (TimeSpan.FromSeconds (5), lua ["b"]);
+                Assert.That(lua["b"], Is.EqualTo(TimeSpan.FromSeconds(5)));
 				lua.DoString ("d = test:NullableMethod2(2)");
-				Assert.AreEqual (2, lua ["d"]);
+                Assert.That(lua["d"], Is.EqualTo(2));
 				lua.DoString ("c = test:NullableMethod2(nil)");
-				Assert.AreEqual (null, lua ["c"]);
+                Assert.That(lua["c"], Is.EqualTo(null));
 			}
 		}
 
@@ -727,10 +745,13 @@ namespace NLuaTest
 		{
 			using (Lua lua = new Lua ()) {
 				object[] res = lua.DoString ("a=2\nreturn a,3");
-				//Console.WriteLine("a="+res[0]+", b="+res[1]);
-				Assert.AreEqual (res [0], 2d);
-				Assert.AreEqual (res [1], 3d);
-			}
+                Assert.Multiple(() =>
+                {
+                    //Console.WriteLine("a="+res[0]+", b="+res[1]);
+                    Assert.That(res[0], Is.EqualTo(2d));
+                    Assert.That(res[1], Is.EqualTo(3d));
+                });
+            }
 		}
 		/*
         * Tests getting of global numeric variables
@@ -741,8 +762,8 @@ namespace NLuaTest
 			using (Lua lua = new Lua ()) {
 				lua.DoString ("a=2");
 				double num = lua.GetNumber ("a");
-				//Console.WriteLine("a="+num);
-				Assert.AreEqual (num, 2d);
+                //Console.WriteLine("a="+num);
+                Assert.That(num, Is.EqualTo(2d));
 			}
 		}
 		/*
@@ -755,8 +776,8 @@ namespace NLuaTest
 				lua.DoString ("a=2");
 				lua ["a"] = 3;
 				double num = lua.GetNumber ("a");
-				//Console.WriteLine("a="+num);
-				Assert.AreEqual (num, 3d);
+                //Console.WriteLine("a="+num);
+                Assert.That(num, Is.EqualTo(3d));
 			}
 		}
 		/*
@@ -769,8 +790,8 @@ namespace NLuaTest
 			using (Lua lua = new Lua ()) {
 				lua.DoString ("a={b={c=2}}");
 				double num = lua.GetNumber ("a.b.c");
-				//Console.WriteLine("a.b.c="+num);
-				Assert.AreEqual (num, 2d);
+                //Console.WriteLine("a.b.c="+num);
+                Assert.That(num, Is.EqualTo(2d));
 			}
 		}
 		/*
@@ -784,8 +805,8 @@ namespace NLuaTest
 				lua.DoString ("a={b={c=2}}");
 				lua ["a.b.c"] = 3;
 				double num = lua.GetNumber ("a.b.c");
-				//Console.WriteLine("a.b.c="+num);
-				Assert.AreEqual (num, 3d);
+                //Console.WriteLine("a.b.c="+num);
+                Assert.That(num, Is.EqualTo(3d));
 			}
 		}
 		/*
@@ -797,8 +818,8 @@ namespace NLuaTest
 			using (Lua lua = new Lua ()) {
 				lua.DoString ("a=\"test\"");
 				string str = lua.GetString ("a");
-				//Console.WriteLine("a="+str);
-				Assert.AreEqual (str, "test");
+                //Console.WriteLine("a="+str);
+                Assert.That(str, Is.EqualTo("test"));
 			}
 		}
 		/*
@@ -811,8 +832,8 @@ namespace NLuaTest
 				lua.DoString ("a=\"test\"");
 				lua ["a"] = "new test";
 				string str = lua.GetString ("a");
-				//Console.WriteLine("a="+str);
-				Assert.AreEqual (str, "new test");
+                //Console.WriteLine("a="+str);
+                Assert.That(str, Is.EqualTo("new test"));
 			}
 		}
 		/*
@@ -825,8 +846,8 @@ namespace NLuaTest
 			using (Lua lua = new Lua ()) {
 				lua.DoString ("a={b={c=\"test\"}}");
 				string str = lua.GetString ("a.b.c");
-				//Console.WriteLine("a.b.c="+str);
-				Assert.AreEqual (str, "test");
+                //Console.WriteLine("a.b.c="+str);
+                Assert.That(str, Is.EqualTo("test"));
 			}
 		}
 		/*
@@ -840,8 +861,8 @@ namespace NLuaTest
 				lua.DoString ("a={b={c=\"test\"}}");
 				lua ["a.b.c"] = "new test";
 				string str = lua.GetString ("a.b.c");
-				//Console.WriteLine("a.b.c="+str);
-				Assert.AreEqual (str, "new test");
+                //Console.WriteLine("a.b.c="+str);
+                Assert.That(str, Is.EqualTo("new test"));
 			}
 		}
 		/*
@@ -855,8 +876,8 @@ namespace NLuaTest
 				LuaTable tab = lua.GetTable ("b");
 				lua ["a.b"] = tab;
 				double num = lua.GetNumber ("a.b.c");
-				//Console.WriteLine("a.b.c="+num);
-				Assert.AreEqual (num, 3d);
+                //Console.WriteLine("a.b.c="+num);
+                Assert.That(num, Is.EqualTo(3d));
 			}
 		}
 		/*
@@ -869,8 +890,8 @@ namespace NLuaTest
 				lua.DoString ("a={b={c=2}}");
 				LuaTable tab = lua.GetTable ("a.b");
 				double num = (double)tab ["c"];
-				//Console.WriteLine("a.b.c="+num);
-				Assert.AreEqual (num, 2d);
+                //Console.WriteLine("a.b.c="+num);
+                Assert.That(num, Is.EqualTo(2d));
 			}
 		}
 		/*
@@ -884,8 +905,8 @@ namespace NLuaTest
 				lua.DoString ("a={b={c=2}}");
 				LuaTable tab = lua.GetTable ("a");
 				double num = (double)tab ["b.c"];
-				//Console.WriteLine("a.b.c="+num);
-				Assert.AreEqual (num, 2d);
+                //Console.WriteLine("a.b.c="+num);
+                Assert.That(num, Is.EqualTo(2d));
 			}
 		}
 		/*
@@ -899,8 +920,8 @@ namespace NLuaTest
 				LuaTable tab = lua.GetTable ("a.b");
 				tab ["c"] = 3;
 				double num = lua.GetNumber ("a.b.c");
-				//Console.WriteLine("a.b.c="+num);
-				Assert.AreEqual (num, 3d);
+                //Console.WriteLine("a.b.c="+num);
+                Assert.That(num, Is.EqualTo(3d));
 			}
 		}
 		/*
@@ -915,8 +936,8 @@ namespace NLuaTest
 				LuaTable tab = lua.GetTable ("a");
 				tab ["b.c"] = 3;
 				double num = lua.GetNumber ("a.b.c");
-				//Console.WriteLine("a.b.c="+num);
-				Assert.AreEqual (num, 3d);
+                //Console.WriteLine("a.b.c="+num);
+                Assert.That(num, Is.EqualTo(3d));
 			}
 		}
 		/*
@@ -929,8 +950,8 @@ namespace NLuaTest
 				lua.DoString ("a={b={c=\"test\"}}");
 				LuaTable tab = lua.GetTable ("a.b");
 				string str = (string)tab ["c"];
-				//Console.WriteLine("a.b.c="+str);
-				Assert.AreEqual (str, "test");
+                //Console.WriteLine("a.b.c="+str);
+                Assert.That(str, Is.EqualTo("test"));
 			}
 		}
 		/*
@@ -944,8 +965,8 @@ namespace NLuaTest
 				lua.DoString ("a={b={c=\"test\"}}");
 				LuaTable tab = lua.GetTable ("a");
 				string str = (string)tab ["b.c"];
-				//Console.WriteLine("a.b.c="+str);
-				Assert.AreEqual (str, "test");
+                //Console.WriteLine("a.b.c="+str);
+                Assert.That(str, Is.EqualTo("test"));
 			}
 		}
 		/*
@@ -959,8 +980,8 @@ namespace NLuaTest
 				LuaTable tab = lua.GetTable ("a.b");
 				tab ["c"] = "new test";
 				string str = lua.GetString ("a.b.c");
-				//Console.WriteLine("a.b.c="+str);
-				Assert.AreEqual (str, "new test");
+                //Console.WriteLine("a.b.c="+str);
+                Assert.That(str, Is.EqualTo("new test"));
 			}
 		}
 		/*
@@ -975,8 +996,8 @@ namespace NLuaTest
 				LuaTable tab = lua.GetTable ("a");
 				tab ["b.c"] = "new test";
 				string str = lua.GetString ("a.b.c");
-				//Console.WriteLine("a.b.c="+str);
-				Assert.AreEqual (str, "new test");
+                //Console.WriteLine("a.b.c="+str);
+                Assert.That(str, Is.EqualTo("new test"));
 			}
 		}
 		/*
@@ -989,8 +1010,8 @@ namespace NLuaTest
 				lua.DoString ("a=2\nfunction f()\na=3\nend");
 				lua.GetFunction ("f").Call ();
 				double num = lua.GetNumber ("a");
-				//Console.WriteLine("a="+num);
-				Assert.AreEqual (num, 3d);
+                //Console.WriteLine("a="+num);
+                Assert.That(num, Is.EqualTo(3d));
 			}
 		}
 		/*
@@ -1003,8 +1024,8 @@ namespace NLuaTest
 				lua.DoString ("a=2\nfunction f(x)\na=a+x\nend");
 				lua.GetFunction ("f").Call (1);
 				double num = lua.GetNumber ("a");
-				//Console.WriteLine("a="+num);
-				Assert.AreEqual (num, 3d);
+                //Console.WriteLine("a="+num);
+                Assert.That(num, Is.EqualTo(3d));
 			}
 		}
 		/*
@@ -1017,8 +1038,8 @@ namespace NLuaTest
 				lua.DoString ("a=2\nfunction f(x,y)\na=x+y\nend");
 				lua.GetFunction ("f").Call (1, 3);
 				double num = lua.GetNumber ("a");
-				//Console.WriteLine("a="+num);
-				Assert.AreEqual (num, 4d);
+                //Console.WriteLine("a="+num);
+                Assert.That(num, Is.EqualTo(4d));
 			}
 		}
 		/*
@@ -1030,10 +1051,13 @@ namespace NLuaTest
 			using (Lua lua = new Lua ()) {
 				lua.DoString ("function f(x)\nreturn x+2\nend");
 				object[] ret = lua.GetFunction ("f").Call (3);
-				//Console.WriteLine("ret="+ret[0]);
-				Assert.AreEqual (1, ret.Length);
-				Assert.AreEqual (5, (double)ret [0]);
-			}
+                Assert.Multiple(() =>
+                {
+                    //Console.WriteLine("ret="+ret[0]);
+                    Assert.That(ret, Has.Length.EqualTo(1));
+                    Assert.That((double)ret[0], Is.EqualTo(5));
+                });
+            }
 		}
 		/*
         * Tests calling of a global function that returns two values
@@ -1044,11 +1068,14 @@ namespace NLuaTest
 			using (Lua lua = new Lua ()) {
 				lua.DoString ("function f(x,y)\nreturn x,x+y\nend");
 				object[] ret = lua.GetFunction ("f").Call (3, 2);
-				//Console.WriteLine("ret="+ret[0]+","+ret[1]);
-				Assert.AreEqual (2, ret.Length);
-				Assert.AreEqual (3, (double)ret [0]);
-				Assert.AreEqual (5, (double)ret [1]);
-			}
+                Assert.Multiple(() =>
+                {
+                    //Console.WriteLine("ret="+ret[0]+","+ret[1]);
+                    Assert.That(ret, Has.Length.EqualTo(2));
+                    Assert.That((double)ret[0], Is.EqualTo(3));
+                    Assert.That((double)ret[1], Is.EqualTo(5));
+                });
+            }
 		}
 		/*
         * Tests calling of a function inside a table
@@ -1059,11 +1086,14 @@ namespace NLuaTest
 			using (Lua lua = new Lua ()) {
 				lua.DoString ("a={}\nfunction a.f(x,y)\nreturn x,x+y\nend");
 				object[] ret = lua.GetFunction ("a.f").Call (3, 2);
-				//Console.WriteLine("ret="+ret[0]+","+ret[1]);
-				Assert.AreEqual (2, ret.Length);
-				Assert.AreEqual (3, (double)ret [0]);
-				Assert.AreEqual (5, (double)ret [1]);
-			}
+                Assert.Multiple(() =>
+                {
+                    //Console.WriteLine("ret="+ret[0]+","+ret[1]);
+                    Assert.That(ret, Has.Length.EqualTo(2));
+                    Assert.That((double)ret[0], Is.EqualTo(3));
+                    Assert.That((double)ret[1], Is.EqualTo(5));
+                });
+            }
 		}
 		/*
         * Tests setting of a global variable to a CLR object value
@@ -1076,11 +1106,14 @@ namespace NLuaTest
 				t1.testval = 4;
 				lua ["netobj"] = t1;
 				object o = lua ["netobj"];
-				Assert.AreEqual (true, o is TestClass);
+                Assert.That(o is TestClass, Is.EqualTo(true));
 				TestClass t2 = (TestClass)lua ["netobj"];
-				Assert.AreEqual (t2.testval, 4);
-				Assert.AreEqual (t1 , t2);
-			}
+                Assert.Multiple(() =>
+                {
+                    Assert.That(t2.testval, Is.EqualTo(4));
+                    Assert.That(t2, Is.EqualTo(t1));
+                });
+            }
 		}
 		///*
 		// * Tests if CLR object is being correctly collected by Lua
@@ -1112,10 +1145,13 @@ namespace NLuaTest
 				t1.testval = 4;
 				tab ["c"] = t1;
 				TestClass t2 = (TestClass)lua ["a.b.c"];
-				//Console.WriteLine("a.b.c="+t2.testval);
-				Assert.AreEqual (4, t2.testval);
-				Assert.AreEqual (t1 , t2);
-			}
+                Assert.Multiple(() =>
+                {
+                    //Console.WriteLine("a.b.c="+t2.testval);
+                    Assert.That(t2.testval, Is.EqualTo(4));
+                    Assert.That(t2, Is.EqualTo(t1));
+                });
+            }
 		}
 		/*
         * Tests reading and writing of an object's field
@@ -1129,10 +1165,10 @@ namespace NLuaTest
 				lua ["netobj"] = t1;
 				lua.DoString ("var=netobj.val");
 				double var = (double)lua ["var"];
-				//Console.WriteLine("value from Lua="+var);
-				Assert.AreEqual (4, var);
+                //Console.WriteLine("value from Lua="+var);
+                Assert.That(var, Is.EqualTo(4));
 				lua.DoString ("netobj.val=3");
-				Assert.AreEqual (3, t1.val);
+                Assert.That(t1.val, Is.EqualTo(3));
 				//Console.WriteLine("new val (from Lua)="+t1.val);
 			}
 		}
@@ -1149,10 +1185,10 @@ namespace NLuaTest
 				lua ["netobj"] = t1;
 				lua.DoString ("var=netobj.testval");
 				double var = (double)lua ["var"];
-				//Console.WriteLine("value from Lua="+var);
-				Assert.AreEqual (4, var);
+                //Console.WriteLine("value from Lua="+var);
+                Assert.That(var, Is.EqualTo(4));
 				lua.DoString ("netobj.testval=3");
-				Assert.AreEqual (3, t1.testval);
+                Assert.That(t1.testval, Is.EqualTo(3));
 				//Console.WriteLine("new val (from Lua)="+t1.testval);
 			}
 		}
@@ -1167,9 +1203,9 @@ namespace NLuaTest
 				lua.DoString ("var=netobj.teststrval");
 				string var = (string)lua ["var"];
 
-				Assert.AreEqual ("This is a string test", var);
+                Assert.That(var, Is.EqualTo("This is a string test"));
 				lua.DoString ("netobj.teststrval='Another String'");
-				Assert.AreEqual ("Another String", t1.teststrval);
+                Assert.That(t1.teststrval, Is.EqualTo("Another String"));
 				//Console.WriteLine("new val (from Lua)="+t1.testval);
 			}
 		}
@@ -1184,11 +1220,11 @@ namespace NLuaTest
 				t1.testval = 4;
 				lua ["netobj"] = t1;
 				lua.DoString ("netobj:setVal(3)");
-				Assert.AreEqual (3, t1.testval);
+                Assert.That(t1.testval, Is.EqualTo(3));
 				//Console.WriteLine("new val(from C#)="+t1.testval);
 				lua.DoString ("val=netobj:getVal()");
 				int val = (int)lua.GetNumber ("val");
-				Assert.AreEqual (3, val);
+                Assert.That(val, Is.EqualTo(3));
 				//Console.WriteLine("new val(from Lua)="+val);
 			}
 		}
@@ -1202,7 +1238,7 @@ namespace NLuaTest
 				TestClass t1 = new TestClass ();
 				lua ["netobj"] = t1;
 				lua.DoString ("netobj:setVal('str')");
-				Assert.AreEqual ("str", t1.getStrVal ());
+                Assert.That(t1.getStrVal(), Is.EqualTo("str"));
 				//Console.WriteLine("new val(from C#)="+t1.getStrVal());
 			}
 		}
@@ -1219,10 +1255,13 @@ namespace NLuaTest
 				lua.DoString ("a,b=netobj:outVal()");
 				int a = (int)lua.GetNumber ("a");
 				int b = (int)lua.GetNumber ("b");
-				Assert.AreEqual (3, a);
-				Assert.AreEqual (5, b);
-				//Console.WriteLine("function returned (from lua)="+a+","+b);
-			}
+                Assert.Multiple(() =>
+                {
+                    Assert.That(a, Is.EqualTo(3));
+                    Assert.That(b, Is.EqualTo(5));
+                });
+                //Console.WriteLine("function returned (from lua)="+a+","+b);
+            }
 		}
 		/*
         * Tests calling of an object's method with overloading and
@@ -1237,10 +1276,13 @@ namespace NLuaTest
 				lua.DoString ("a,b=netobj:outVal(2)");
 				int a = (int)lua.GetNumber ("a");
 				int b = (int)lua.GetNumber ("b");
-				Assert.AreEqual (2, a);
-				Assert.AreEqual (5, b);
-				//Console.WriteLine("function returned (from lua)="+a+","+b);
-			}
+                Assert.Multiple(() =>
+                {
+                    Assert.That(a, Is.EqualTo(2));
+                    Assert.That(b, Is.EqualTo(5));
+                });
+                //Console.WriteLine("function returned (from lua)="+a+","+b);
+            }
 		}
 		/*
         * Tests calling of an object's method with ref params
@@ -1254,10 +1296,13 @@ namespace NLuaTest
 				lua.DoString ("a,b=netobj:outVal(2,3)");
 				int a = (int)lua.GetNumber ("a");
 				int b = (int)lua.GetNumber ("b");
-				Assert.AreEqual (2, a);
-				Assert.AreEqual (5, b);
-				//Console.WriteLine("function returned (from lua)="+a+","+b);
-			}
+                Assert.Multiple(() =>
+                {
+                    Assert.That(a, Is.EqualTo(2));
+                    Assert.That(b, Is.EqualTo(5));
+                });
+                //Console.WriteLine("function returned (from lua)="+a+","+b);
+            }
 		}
 		/*
         * Tests calling of two versions of an object's method that have
@@ -1273,10 +1318,13 @@ namespace NLuaTest
 				lua.DoString ("b=netobj['NLuaTest.Mock.IFoo1.foo']");
 				int a = (int)lua.GetNumber ("a");
 				int b = (int)lua.GetNumber ("b");
-				Assert.AreEqual (5, a);
-				Assert.AreEqual (1, b);
-				//Console.WriteLine("function returned (from lua)="+a+","+b);
-			}
+                Assert.Multiple(() =>
+                {
+                    Assert.That(a, Is.EqualTo(5));
+                    Assert.That(b, Is.EqualTo(1));
+                });
+                //Console.WriteLine("function returned (from lua)="+a+","+b);
+            }
 		}
 		/*
         * Tests instantiating an object with no-argument constructor
@@ -1291,8 +1339,8 @@ namespace NLuaTest
 				lua.DoString ("test:setVal(3)");
 				object[] res = lua.DoString ("return test");
 				TestClass test = (TestClass)res [0];
-				//Console.WriteLine("returned: "+test.testval);
-				Assert.AreEqual (3, test.testval);
+                //Console.WriteLine("returned: "+test.testval);
+                Assert.That(test.testval, Is.EqualTo(3));
 			}
 		}
 		/*
@@ -1307,8 +1355,8 @@ namespace NLuaTest
 				lua.DoString ("test=TestClass(3)");
 				object[] res = lua.DoString ("return test");
 				TestClass test = (TestClass)res [0];
-				//Console.WriteLine("returned: "+test.testval);
-				Assert.AreEqual (3, test.testval);
+                //Console.WriteLine("returned: "+test.testval);
+                Assert.That(test.testval, Is.EqualTo(3));
 			}
 		}
 		/*
@@ -1323,8 +1371,8 @@ namespace NLuaTest
 				lua.DoString ("test=TestClass('str')");
 				object[] res = lua.DoString ("return test");
 				TestClass test = (TestClass)res [0];
-				//Console.WriteLine("returned: "+test.getStrVal());
-				Assert.AreEqual ("str", test.getStrVal ());
+                //Console.WriteLine("returned: "+test.getStrVal());
+                Assert.That(test.getStrVal(), Is.EqualTo("str"));
 			}
 		}
 		/*
@@ -1338,7 +1386,7 @@ namespace NLuaTest
 				lua ["netobj"] = arr;
 				lua.DoString ("val=netobj[1]");
 				string val = lua.GetString ("val");
-				Assert.AreEqual ("str2", val);
+                Assert.That(val, Is.EqualTo("str2"));
 				//Console.WriteLine("new val(from array to Lua)="+val);
 			}
 		}
@@ -1352,7 +1400,7 @@ namespace NLuaTest
 				string[] arr = new string [] { "str1", "str2", "str3" };
 				lua ["netobj"] = arr;
 				lua.DoString ("netobj[1]='test'");
-				Assert.AreEqual ("test", arr [1]);
+                Assert.That(arr[1], Is.EqualTo("test"));
 				//Console.WriteLine("new val(from Lua to array)="+arr[1]);
 			}
 		}
@@ -1368,7 +1416,7 @@ namespace NLuaTest
 				lua.DoString ("arr=TestClass[3]");
 				lua.DoString ("for i=0,2 do arr[i]=TestClass(i+1) end");
 				TestClass[] arr = (TestClass[])lua ["arr"];
-				Assert.AreEqual (arr [1].testval, 2);
+                Assert.That(arr[1].testval, Is.EqualTo(2));
 			}
 		}
 		/*
@@ -1387,7 +1435,7 @@ namespace NLuaTest
 				lua.DoString ("test=TestClass()");
 				lua.DoString ("a=test:callDelegate1(func)");
 				int a = (int)lua.GetNumber ("a");
-				Assert.AreEqual (5, a);
+                Assert.That(a, Is.EqualTo(5));
 				//Console.WriteLine("delegate returned: "+a);
 			}
 		}
@@ -1407,7 +1455,7 @@ namespace NLuaTest
 				lua.DoString ("test=TestClass()");
 				lua.DoString ("a=test:callDelegate2(func)");
 				int a = (int)lua.GetNumber ("a");
-				Assert.AreEqual (6, a);
+                Assert.That(a, Is.EqualTo(6));
 				//Console.WriteLine("delegate returned: "+a);
 			}
 		}
@@ -1427,7 +1475,7 @@ namespace NLuaTest
 				lua.DoString ("test=TestClass()");
 				lua.DoString ("a=test:callDelegate3(func)");
 				int a = (int)lua.GetNumber ("a");
-				Assert.AreEqual (5, a);
+                Assert.That(a, Is.EqualTo(5));
 				//Console.WriteLine("delegate returned: "+a);
 			}
 		}
@@ -1447,7 +1495,7 @@ namespace NLuaTest
 				lua.DoString ("test=TestClass()");
 				lua.DoString ("a=test:callDelegate4(func)");
 				int a = (int)lua.GetNumber ("a");
-				Assert.AreEqual (5, a);
+                Assert.That(a, Is.EqualTo(5));
 				//Console.WriteLine("delegate returned: "+a);
 			}
 		}
@@ -1466,7 +1514,7 @@ namespace NLuaTest
 				lua.DoString ("function func(x,y) return x.testval+y.testval; end");
 				lua.DoString ("a=test:callDelegate5(func)");
 				int a = (int)lua.GetNumber ("a");
-				Assert.AreEqual (5, a);
+                Assert.That(a, Is.EqualTo(5));
 				//Console.WriteLine("delegate returned: "+a);
 			}
 		}
@@ -1486,7 +1534,7 @@ namespace NLuaTest
 				lua.DoString ("test=TestClass()");
 				lua.DoString ("a=test:callDelegate6(func)");
 				int a = (int)lua.GetNumber ("a");
-				Assert.AreEqual (6, a);
+                Assert.That(a, Is.EqualTo(6));
 				//Console.WriteLine("delegate returned: "+a);
 			}
 		}
@@ -1505,7 +1553,7 @@ namespace NLuaTest
 				lua.DoString ("function func(x,y) return TestClass(x+y.testval); end");
 				lua.DoString ("a=test:callDelegate7(func)");
 				int a = (int)lua.GetNumber ("a");
-				Assert.AreEqual (5, a);
+                Assert.That(a, Is.EqualTo(5));
 				//Console.WriteLine("delegate returned: "+a);
 			}
 		}
@@ -1528,7 +1576,7 @@ namespace NLuaTest
 				lua.DoString ("test=TestClass()");
 				lua.DoString ("a=test:callInterface1(itest)");
 				int a = (int)lua.GetNumber ("a");
-				Assert.AreEqual (5, a);
+                Assert.That(a, Is.EqualTo(5));
 				//Console.WriteLine("interface returned: "+a);
 			}
 		}
@@ -1549,7 +1597,7 @@ namespace NLuaTest
 				lua.DoString ("test=TestClass()");
 				lua.DoString ("a=test:callInterface2(itest)");
 				int a = (int)lua.GetNumber ("a");
-				Assert.AreEqual (6, a);
+                Assert.That(a, Is.EqualTo(6));
 				//Console.WriteLine("interface returned: "+a);
 			}
 		}
@@ -1570,7 +1618,7 @@ namespace NLuaTest
 				lua.DoString ("test=TestClass()");
 				lua.DoString ("a=test:callInterface3(itest)");
 				int a = (int)lua.GetNumber ("a");
-				Assert.AreEqual (5, a);
+                Assert.That(a, Is.EqualTo(5));
 				//Console.WriteLine("interface returned: "+a);
 			}
 		}
@@ -1591,7 +1639,7 @@ namespace NLuaTest
 				lua.DoString ("test=TestClass()");
 				lua.DoString ("a=test:callInterface4(itest)");
 				int a = (int)lua.GetNumber ("a");
-				Assert.AreEqual (5, a);
+                Assert.That(a, Is.EqualTo(5));
 				//Console.WriteLine("interface returned: "+a);
 			}
 		}
@@ -1611,7 +1659,7 @@ namespace NLuaTest
 				lua.DoString ("test=TestClass()");
 				lua.DoString ("a=test:callInterface5(itest)");
 				int a = (int)lua.GetNumber ("a");
-				Assert.AreEqual (5, a);
+                Assert.That(a, Is.EqualTo(5));
 				//Console.WriteLine("interface returned: "+a);
 			}
 		}
@@ -1632,7 +1680,7 @@ namespace NLuaTest
 				lua.DoString ("test=TestClass()");
 				lua.DoString ("a=test:callInterface6(itest)");
 				int a = (int)lua.GetNumber ("a");
-				Assert.AreEqual (6, a);
+                Assert.That(a, Is.EqualTo(6));
 				//Console.WriteLine("interface returned: "+a);
 			}
 		}
@@ -1652,7 +1700,7 @@ namespace NLuaTest
 				lua.DoString ("function itest:test7(x,y) return TestClass(x+y.testval); end");
 				lua.DoString ("a=test:callInterface7(itest)");
 				int a = (int)lua.GetNumber ("a");
-				Assert.AreEqual (5, a);
+                Assert.That(a, Is.EqualTo(5));
 				//Console.WriteLine("interface returned: "+a);
 			}
 		}
@@ -1920,7 +1968,7 @@ namespace NLuaTest
 				lua.DoString ("function itest:set_intProp(val) itest.int_prop=val; end");
 				lua.DoString ("a=test:callInterface8(itest)");
 				int a = (int)lua.GetNumber ("a");
-				Assert.AreEqual (3, a);
+                Assert.That(a, Is.EqualTo(3));
 				//Console.WriteLine("interface returned: "+a);
 			}
 		}
@@ -1940,7 +1988,7 @@ namespace NLuaTest
 				lua.DoString ("function itest:set_refProp(val) itest.int_prop=val.testval; end");
 				lua.DoString ("a=test:callInterface9(itest)");
 				int a = (int)lua.GetNumber ("a");
-				Assert.AreEqual (3, a);
+                Assert.That(a, Is.EqualTo(3));
 				//Console.WriteLine("interface returned: "+a);
 			}
 		}
@@ -1963,7 +2011,7 @@ namespace NLuaTest
 				lua.DoString ("a=TestClass.callOverridable(test,2,3)");
 				int a = (int)lua.GetNumber ("a");
 				lua.DoString ("luanet.free_object(test)");
-				Assert.AreEqual (6, a);
+                Assert.That(a, Is.EqualTo(6));
 				//                 lua.DoString("luanet.load_assembly('NLuaTest')");
 				//                 lua.DoString("TestClass=luanet.import_type('NLuaTest.Mock.TestClass')");
 				//                 lua.DoString("test={}");
@@ -1992,7 +2040,7 @@ namespace NLuaTest
 				lua.DoString ("setMethod=luanet.get_method_bysig(test,'setVal','System.String')");
 				lua.DoString ("setMethod('test')");
 				TestClass test = (TestClass)lua ["test"];
-				Assert.AreEqual ("test", test.getStrVal ());
+                Assert.That(test.getStrVal(), Is.EqualTo("test"));
 				//Console.WriteLine("interface returned: "+test.getStrVal());
 			}
 		}
@@ -2011,7 +2059,7 @@ namespace NLuaTest
 				lua.DoString ("setMethod=luanet.get_method_bysig(TestClass,'setVal','System.String')");
 				lua.DoString ("setMethod(test,'test')");
 				TestClass test = (TestClass)lua ["test"];
-				Assert.AreEqual ("test", test.getStrVal ());
+                Assert.That(test.getStrVal(), Is.EqualTo("test"));
 				//Console.WriteLine("interface returned: "+test.getStrVal());
 			}
 		}
@@ -2028,7 +2076,7 @@ namespace NLuaTest
 				lua.DoString ("make_method=luanet.get_method_bysig(TestClass,'makeFromString','System.String')");
 				lua.DoString ("test=make_method('test')");
 				TestClass test = (TestClass)lua ["test"];
-				Assert.AreEqual ("test", test.getStrVal ());
+                Assert.That(test.getStrVal(), Is.EqualTo("test"));
 				//Console.WriteLine("interface returned: "+test.getStrVal());
 			}
 		}
@@ -2045,7 +2093,7 @@ namespace NLuaTest
 				lua.DoString ("test_cons=luanet.get_constructor_bysig(TestClass,'System.String')");
 				lua.DoString ("test=test_cons('test')");
 				TestClass test = (TestClass)lua ["test"];
-				Assert.AreEqual ("test", test.getStrVal ());
+                Assert.That(test.getStrVal(), Is.EqualTo("test"));
 				//Console.WriteLine("interface returned: "+test.getStrVal());
 			}
 		}
@@ -2070,7 +2118,7 @@ namespace NLuaTest
 				lua.LoadCLRPackage ();
 				lua.DoString ("import'System'");
 				var x  = lua.DoString ("return luanet.ctype(String)")[0];
-				Assert.AreEqual (x, typeof(String), "#1 String ctype test");
+                Assert.That(typeof(String), Is.EqualTo(x), "#1 String ctype test");
 			}
 		}
 
@@ -2079,7 +2127,7 @@ namespace NLuaTest
 		{
 			using (Lua lua = new Lua ()) {
 				lua.DoString (@"print(""waüäq?=()[&]ß"")");
-				Assert.IsTrue (true);
+                Assert.Pass();
 			}
 		}
 
@@ -2092,7 +2140,7 @@ namespace NLuaTest
 				lua.DoString ("res = LuaTests.UnicodeString");
 				string res = (string)lua ["res"];
 
-				Assert.AreEqual (LuaTests.UnicodeString, res);
+                Assert.That(res, Is.EqualTo(LuaTests.UnicodeString));
 			}
 		}
 
@@ -2103,7 +2151,7 @@ namespace NLuaTest
 				lua.DoString("res = 'Файл'");
 				string res = (string)lua["res"];
 
-				Assert.AreEqual(LuaTests.UnicodeStringRussian, res);
+                Assert.That(res, Is.EqualTo(LuaTests.UnicodeStringRussian));
 			}
 		}
 
@@ -2122,8 +2170,8 @@ namespace NLuaTest
 							 "while coroutine.resume(co_routine) do end;");
 
 				double num = lua.GetNumber ("a");
-				//Console.WriteLine("a="+num);
-				Assert.AreEqual (num, 2d);
+                //Console.WriteLine("a="+num);
+                Assert.That(num, Is.EqualTo(2d));
 			}
 		}
 
@@ -2135,7 +2183,7 @@ namespace NLuaTest
 
 			using (Lua lua = new Lua ()) {
 				lua.DebugHook += (sender,args) => {
-					Assert.AreEqual (args.LuaDebug.currentline,lines [line]);
+                    Assert.That(lines[line], Is.EqualTo(args.LuaDebug.currentline));
 					line ++;
 				};
 				lua.SetDebugHook (NLua.Event.EventMasks.LUA_MASKLINE, 0);
@@ -2153,7 +2201,7 @@ namespace NLuaTest
 				lua.DoString (@"g_dot = {} 
 							 g_dot['key.with.dot'] = 42");
 
-				Assert.AreEqual (42, (int)(double)lua ["g_dot.key\\.with\\.dot"]);
+                Assert.That((int)(double)lua["g_dot.key\\.with\\.dot"], Is.EqualTo(42));
 			}
 		}
 #if !WINDOWS_PHONE && !NET_3_5
@@ -2168,7 +2216,7 @@ namespace NLuaTest
 				lua ["a"] = a;
 				lua ["b"] = b;
 				var res = lua.DoString (@"return a + b") [0];
-				Assert.AreEqual (x, res);
+                Assert.That(res, Is.EqualTo(x));
 			}
 		}
 
@@ -2183,7 +2231,7 @@ namespace NLuaTest
 				lua ["a"] = a;
 				lua ["b"] = b;
 				var res = lua.DoString (@"return a - b") [0];
-				Assert.AreEqual (x, res);
+                Assert.That(res, Is.EqualTo(x));
 			}
 		}
 
@@ -2198,7 +2246,7 @@ namespace NLuaTest
 				lua ["a"] = a;
 				lua ["b"] = b;
 				var res = lua.DoString (@"return a * b") [0];
-				Assert.AreEqual (x, res);
+                Assert.That(res, Is.EqualTo(x));
 			}
 		}
 
@@ -2213,7 +2261,7 @@ namespace NLuaTest
 				lua ["a"] = a;
 				lua ["b"] = b;
 				var res = lua.DoString (@"return a == b") [0];
-				Assert.AreEqual (x, res);
+                Assert.That(res, Is.EqualTo(x));
 			}
 		}
 
@@ -2228,7 +2276,7 @@ namespace NLuaTest
 				lua ["a"] = a;
 				lua ["b"] = b;
 				var res = lua.DoString (@"return a ~= b") [0];
-				Assert.AreEqual (x, res);
+                Assert.That(res, Is.EqualTo(x));
 			}
 		}
 
@@ -2245,7 +2293,7 @@ namespace NLuaTest
 				var expected = new System.Numerics.Complex (-10, -5);
 
 				var res = lua ["c"];
-				Assert.AreEqual (expected, res);
+                Assert.That(res, Is.EqualTo(expected));
 			}
 		}
 #endif
@@ -2262,11 +2310,14 @@ namespace NLuaTest
 							  Name = x.Name;
 							  Name2 = x.name");
 
-				Assert.AreEqual ("name", lua ["name"]);
-				Assert.AreEqual ("**name**", lua ["name2"]);
-				Assert.AreEqual ("**name**", lua ["Name"]);
-				Assert.AreEqual ("name", lua ["Name2"]);
-			}
+                Assert.Multiple(() =>
+                {
+                    Assert.That(lua["name"], Is.EqualTo("name"));
+                    Assert.That(lua["name2"], Is.EqualTo("**name**"));
+                    Assert.That(lua["Name"], Is.EqualTo("**name**"));
+                    Assert.That(lua["Name2"], Is.EqualTo("name"));
+                });
+            }
 		}
 
 		[Test]
@@ -2283,15 +2334,21 @@ namespace NLuaTest
 
 				var v = (Vector)lua ["v"];
 
-				Assert.AreEqual (20, v.x, "#1");
-				Assert.AreEqual (6, v.y, "#2");
+                Assert.Multiple(() =>
+                {
+                    Assert.That(v.x, Is.EqualTo(20), "#1");
+                    Assert.That(v.y, Is.EqualTo(6), "#2");
+                });
 
-				lua.DoString (@" x = 2 * v");
+                lua.DoString (@" x = 2 * v");
 				var x = (Vector)lua ["x"];
 
-				Assert.AreEqual (40, x.x, "#3");
-				Assert.AreEqual (12, x.y, "#4");
-			}
+                Assert.Multiple(() =>
+                {
+                    Assert.That(x.x, Is.EqualTo(40), "#3");
+                    Assert.That(x.y, Is.EqualTo(12), "#4");
+                });
+            }
 		}
 
 		[Test]
@@ -2312,7 +2369,7 @@ namespace NLuaTest
 				lua.DoString (" v:Length() ");
 				lua.DoString (@" len2 = v:Length()");
 				double len2 = (double)lua ["len2"];
-				Assert.AreEqual (len, len2, "#1");
+                Assert.That(len2, Is.EqualTo(len), "#1");
 			}
 		}
 		
@@ -2333,7 +2390,7 @@ namespace NLuaTest
 				lua.DoString (" p:GetFirstName() ");
 				lua.DoString (@" name2 = p:GetFirstName()");
 				string name2 = (string)lua ["name2"];
-				Assert.AreEqual (name, name2, "#1");
+                Assert.That(name2, Is.EqualTo(name), "#1");
 			}
 		}
 
@@ -2350,9 +2407,12 @@ namespace NLuaTest
 								obj:Func ('10')
 								obj:Func (10)
 								");
-				Assert.AreEqual (3, obj.CallsToIntFunc,"#integer");
-				Assert.AreEqual (2, obj.CallsToStringFunc, "#string");
-			}
+                Assert.Multiple(() =>
+                {
+                    Assert.That(obj.CallsToIntFunc, Is.EqualTo(3), "#integer");
+                    Assert.That(obj.CallsToStringFunc, Is.EqualTo(2), "#string");
+                });
+            }
 		}
 
 		[Test]
@@ -2400,7 +2460,7 @@ namespace NLuaTest
 				++level;
 			}
 			string x = sb.ToString ();
-			Assert.True (!string.IsNullOrEmpty(x));
+            Assert.That(!string.IsNullOrEmpty(x), Is.True);
 		}
 
 		[Test]
@@ -2411,7 +2471,7 @@ namespace NLuaTest
 				l.DoString ("import ('NLuaTest')");
 				l.DoString ("res = testClass.read() ");
 				string res = (string)l ["res"];
-				Assert.AreEqual (testClass.read (), res);
+                Assert.That(res, Is.EqualTo(testClass.read()));
 			}
 		}
 
@@ -2428,7 +2488,7 @@ namespace NLuaTest
 				l.DoString (@" model.DrawMe (0) ");
 			}
 
-			Assert.True (called);
+            Assert.That(called, Is.True);
 		}
 
 		[Test]
@@ -2442,9 +2502,12 @@ namespace NLuaTest
 				l.DoString (" d ('string', 10) ");
 			}
 
-			Assert.AreEqual ("string", sval, "#1");
-			Assert.AreEqual (10 , nval, "#2");
-		}
+            Assert.Multiple(() =>
+            {
+                Assert.That(sval, Is.EqualTo("string"), "#1");
+                Assert.That(nval, Is.EqualTo(10), "#2");
+            });
+        }
 
 		[Test]
 		public void TestCallSimpleDelegate ()
@@ -2456,7 +2519,7 @@ namespace NLuaTest
 				l.DoString (" d () ");
 			}
 
-			Assert.True (called);
+            Assert.That(called, Is.True);
 		}
 
 		[Test]
@@ -2474,7 +2537,7 @@ namespace NLuaTest
 				}
 			}
 
-			Assert.True (fail);
+            Assert.That(fail, Is.True);
 		}
 
 		[Test]
@@ -2490,9 +2553,12 @@ namespace NLuaTest
 				");
 				string r1 = (string) l ["r1"];
 				string r2 = (string) l ["r2"];
-				Assert.AreEqual ("parameter-field1", r1, "#1");
-				Assert.AreEqual ("int-test" , r2, "#2");
-			}
+                Assert.Multiple(() =>
+                {
+                    Assert.That(r1, Is.EqualTo("parameter-field1"), "#1");
+                    Assert.That(r2, Is.EqualTo("int-test"), "#2");
+                });
+            }
 		}
 
 		[Test]
@@ -2507,9 +2573,12 @@ namespace NLuaTest
 							 x = {name}(param)"
 				);
 				LuaTable result = lua.GetTable("x");
-				Assert.AreEqual("test", result[1]);
-				Assert.AreEqual("testValue", result[2]);
-			}
+                Assert.Multiple(() =>
+                {
+                    Assert.That(result[1], Is.EqualTo("test"));
+                    Assert.That(result[2], Is.EqualTo("testValue"));
+                });
+            }
 		}
 
 		[Test]
@@ -2522,7 +2591,7 @@ namespace NLuaTest
 					r = TestClass.MethodWithParams(2)			
 				");
 				int r =  (int)l.GetNumber ("r");
-				Assert.AreEqual (0, r, "#1");
+                Assert.That(r, Is.EqualTo(0), "#1");
 			}
 		}
 
@@ -2537,7 +2606,7 @@ namespace NLuaTest
 					r = TestClass.MethodWithParams(2, 7, 4)			
 				");
 	            int r = (int)l.GetNumber("r");
-	            Assert.AreEqual(2, r, "#1");
+                Assert.That(r, Is.EqualTo(2), "#1");
 	        }
 	    }
 
@@ -2552,7 +2621,7 @@ namespace NLuaTest
 					r = TestClass.MethodWithObjectParams(2, nil, 4, 'abc')			
 				");
 	            int r = (int)l.GetNumber("r");
-	            Assert.AreEqual(4, r, "#1");
+                Assert.That(r, Is.EqualTo(4), "#1");
 	        }
 	    }
 
@@ -2567,7 +2636,7 @@ namespace NLuaTest
 					r = TestClass.MethodWithObjectParams(nil, 4, 'abc')			
 				");
 	            int r = (int)l.GetNumber("r");
-	            Assert.AreEqual(3, r, "#1");
+                Assert.That(r, Is.EqualTo(3), "#1");
 	        }
 	    }
 
@@ -2588,10 +2657,13 @@ namespace NLuaTest
 				string p1 = l.GetString ("p1");
 				string p2 = l.GetString ("p2");
 				string p3 = l.GetString ("p3");
-				Assert.AreEqual ("Default", p1, "#1");
-				Assert.AreEqual ("String", p2, "#1");
-				Assert.AreEqual ("Int", p3, "#1");
-			}
+                Assert.Multiple(() =>
+                {
+                    Assert.That(p1, Is.EqualTo("Default"), "#1");
+                    Assert.That(p2, Is.EqualTo("String"), "#1");
+                    Assert.That(p3, Is.EqualTo("Int"), "#1");
+                });
+            }
 		}
 
 		static Lua m_lua;
