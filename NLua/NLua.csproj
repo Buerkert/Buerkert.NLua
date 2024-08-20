@@ -10,8 +10,7 @@
         </Copyright>
         <VersionPrefix>1.6.0</VersionPrefix>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PropertyGroup>
         <PackageId>Buerkert.NLua</PackageId>
         <Description>NLua allow use Lua from C#, using Windows.</Description>
         <PackageProjectUrl>https://github.com/Buerkert/Buerkert.NLua</PackageProjectUrl>
@@ -21,6 +20,7 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
         <PackageTags>lua nlua</PackageTags>
+<!--        <DebugType>Embedded</DebugType> &lt;!&ndash; Embed source files in the PDB because github packages does not provide a symbol server &ndash;&gt;-->
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>

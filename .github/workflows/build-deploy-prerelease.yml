@@ -25,8 +25,10 @@ jobs:
       run: dotnet build -c Release --version-suffix build.${{ github.run_number }}
     - name: Run unit tests
       run: dotnet test
+    - name: Pack
+      run: dotnet pack -c Release --version-suffix build.${{ github.run_number }} -o package
     - name: Push generated package to GitHub registry
-      run: dotnet nuget push NLua\bin\Release\Buerkert.NLua.*.*nupkg --api-key ${{secrets.GITHUB_TOKEN}}
+      run: dotnet nuget push package\Buerkert.NLua.*.*nupkg --api-key ${{secrets.GITHUB_TOKEN}}
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
