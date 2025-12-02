@@ -238,7 +238,6 @@ namespace NLua.Method
 					if (!hasMatch) {
 						string msg = (candidateName == null) ? "invalid arguments to method call" : ("invalid arguments to method: " + candidateName);
 						_Translator.ThrowError (luaState, msg);
-						LuaLib.LuaPushNil (luaState);
 						return 1;
 					}
 				}
@@ -259,7 +258,6 @@ namespace NLua.Method
 						failedCall = false;
 					} else if (methodToCall.ContainsGenericParameters) {
 						_Translator.ThrowError (luaState, "unable to invoke method on generic class as the current method is an open generic method");
-						LuaLib.LuaPushNil (luaState);
 						return 1;
 					}
 				} else {
@@ -270,7 +268,6 @@ namespace NLua.Method
 
 					if (!_Translator.MatchParameters (luaState, methodToCall, ref _LastCalledMethod)) {
 						_Translator.ThrowError (luaState, "invalid arguments to method call");
-						LuaLib.LuaPushNil (luaState);
 						return 1;
 					}
 				}
