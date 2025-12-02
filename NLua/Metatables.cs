@@ -32,6 +32,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using NLua.Method;
 using NLua.Extensions;
+using NLua.Exceptions;
 
 #if MONOTOUCH
 	using ObjCRuntime;
@@ -135,14 +136,14 @@ namespace NLua
 		private static int RunFunctionDelegate (LuaState luaState)
 		{
 			var translator = ObjectTranslatorPool.Instance.Find (luaState);
-			return RunFunctionDelegate (luaState, translator);
-		}
-
-		private static int RunFunctionDelegate (LuaState luaState, ObjectTranslator translator)
-		{
 			LuaNativeFunction func = (LuaNativeFunction)translator.GetRawNetObject (luaState, 1);
 			LuaLib.LuaRemove (luaState, 1);
-			return func (luaState);
+			int result = func(luaState);
+			var exception = translator.GetObject(luaState, -1) as LuaScriptException;
+
+			if (exception != null)
+				LuaLib.LuaError(luaState);
+			return result;
 		}
 
 		/*
@@ -270,7 +271,6 @@ namespace NLua
 
 			if (obj1 == null) {
 				translator.ThrowError (luaState, "Cannot negate a nil object");
-				LuaLib.LuaPushNil (luaState);
 				return 1;
 			}
 
@@ -279,7 +279,6 @@ namespace NLua
 
 			if (opUnaryNegation == null) {
 				translator.ThrowError (luaState, "Cannot negate object (" + type.Name + " does not overload the operator -)");
-				LuaLib.LuaPushNil (luaState);
 				return 1;
 			}
 			obj1 = opUnaryNegation.Invoke (obj1, new object [] { obj1 });
@@ -384,7 +383,6 @@ namespace NLua
 
 			if (obj == null) {
 				translator.ThrowError (luaState, "trying to index an invalid object reference");
-				LuaLib.LuaPushNil (luaState);
 				return 1;
 			}
 
@@ -442,7 +440,7 @@ namespace NLua
 
 							if (actualParms == null || actualParms.Length != 1) {
 								translator.ThrowError (luaState, "method not found (or no indexer): " + index);
-								LuaLib.LuaPushNil (luaState);
+								return 1;
 							} else {
 								// Get the index in a form acceptable to the getter
 								index = translator.GetAsType (luaState, 2, actualParms [0].ParameterType);
@@ -461,7 +459,7 @@ namespace NLua
 									else
 										translator.ThrowError (luaState, "exception indexing '" + index + "' " + e.Message);
 
-									LuaLib.LuaPushNil (luaState);
+									return 1;
 								}
 							}
 						}
@@ -493,9 +491,7 @@ namespace NLua
 
 			if (obj == null) {
 				translator.ThrowError (luaState, "trying to index an invalid object reference");
-				LuaLib.LuaPushNil (luaState);
-				LuaLib.LuaPushBoolean (luaState, false);
-				return 2;
+				return 1;
 			}
 
 			string methodName = LuaLib.LuaToString (luaState, 2).ToString ();
@@ -642,7 +638,7 @@ namespace NLua
 							LuaLib.LuaPushNil (luaState);
 					} catch (TargetInvocationException e) {  // Convert this exception into a Lua error
 						ThrowError (luaState, e);
-						LuaLib.LuaPushNil (luaState);
+						return 1;
 					}
 #if NETFX_CORE
 				} else if (member is EventInfo) {
@@ -689,7 +685,7 @@ namespace NLua
 				} else {
 					// If we reach this point we found a static method, but can't use it in this context because the user passed in an instance
 					translator.ThrowError (luaState, "can't pass instance to static method " + methodName);
-					LuaLib.LuaPushNil (luaState);
+					return 1;
 				}
 			} else {
 
@@ -704,7 +700,7 @@ namespace NLua
 				// is not sufficient.  valid data members may return nil and therefore there must be some
 				// way to know the member just doesn't exist.
 				translator.ThrowError (luaState, "unknown member name " + methodName);
-				LuaLib.LuaPushNil (luaState);
+				return 1;
 			}
 
 			// push false because we are NOT returning a function (see luaIndexFunction)
@@ -783,7 +779,7 @@ namespace NLua
 
 			if (target == null) {
 				translator.ThrowError (luaState, "trying to index and invalid object reference");
-				return 0;
+				return 1;
 			}
 
 			var type = target.GetType ();
@@ -821,7 +817,10 @@ namespace NLua
 						methodArgs [1] = val;
 						setter.Invoke (target, methodArgs);
 					} else
+					{
 						translator.ThrowError (luaState, detailMessage); // Pass the original message from trySetMember because it is probably best
+						return 1;
+					}
 				}
 #if !SILVERLIGHT
 			} catch (SEHException) {
@@ -830,6 +829,7 @@ namespace NLua
 #endif
 			} catch (Exception e) {
 				ThrowError (luaState, e);
+				return 1;
 			}
 
 			return 0;
@@ -888,7 +888,8 @@ namespace NLua
 				try {
 					field.SetValue (target, val);
 				} catch (Exception e) {
-					ThrowError (luaState, e);
+					detailMessage = "error setting field: " + e.Message;
+					return false;
 				}
 
 				// We did a call
@@ -904,7 +905,8 @@ namespace NLua
 				try {
 					property.SetValue (target, val, null);
 				} catch (Exception e) {
-					ThrowError (luaState, e);
+					detailMessage = "Error setting property: " + e.Message;
+					return false;
 				}
 
 				// We did a call
@@ -925,7 +927,10 @@ namespace NLua
 			bool success = TrySetMember (luaState, targetType, target, bindingType, out detail);
 
 			if (!success)
+			{
 				translator.ThrowError (luaState, detail);
+				return 1;
+			}
 
 			return 0;
 		}
@@ -966,7 +971,6 @@ namespace NLua
 
 			if (obj == null || !(obj is ProxyType)) {
 				translator.ThrowError (luaState, "trying to index an invalid type reference");
-				LuaLib.LuaPushNil (luaState);
 				return 1;
 			} else
 				klass = (ProxyType)obj;
@@ -1007,7 +1011,7 @@ namespace NLua
 
 			if (obj == null || !(obj is ProxyType)) {
 				translator.ThrowError (luaState, "trying to index an invalid type reference");
-				return 0;
+				return 1;
 			} else
 				target = (ProxyType)obj;
 
@@ -1033,7 +1037,6 @@ namespace NLua
 
 			if (objDelegate == null || !(objDelegate is Delegate)) {
 				translator.ThrowError (luaState, "trying to invoke a not delegate or callable value");
-				LuaLib.LuaPushNil (luaState);
 				return 1;
 			}
 
@@ -1061,7 +1064,6 @@ namespace NLua
 			}
 
 			translator.ThrowError (luaState, "Cannot invoke delegate (invalid arguments for  " + methodDelegate.Name + ")");
-			LuaLib.LuaPushNil (luaState);
 			return 1;
 		}
 
@@ -1089,7 +1091,6 @@ namespace NLua
 
 			if (obj == null || !(obj is ProxyType)) {
 				translator.ThrowError (luaState, "trying to call constructor on an invalid type reference");
-				LuaLib.LuaPushNil (luaState);
 				return 1;
 			} else
 				klass = (ProxyType)obj;
@@ -1105,7 +1106,7 @@ namespace NLua
 						translator.Push (luaState, constructor.Invoke (validConstructor.args));
 					} catch (TargetInvocationException e) {
 						ThrowError (luaState, e);
-						LuaLib.LuaPushNil (luaState);
+						return 1;
 					} catch {
 						LuaLib.LuaPushNil (luaState);
 					}
@@ -1129,7 +1130,6 @@ namespace NLua
 			string constructorName = (constructors.Length == 0) ? "unknown" : constructors [0].Name;
 			translator.ThrowError (luaState, String.Format ("{0} does not contain constructor({1}) argument match",
 				klass.UnderlyingSystemType, constructorName));
-			LuaLib.LuaPushNil (luaState);
 			return 1;
 		}
 		static bool IsInteger(double x) {
@@ -1162,7 +1162,6 @@ namespace NLua
 
 			if (target == null) {
 				translator.ThrowError (luaState, "Cannot call " + operation + " on a nil object");
-				LuaLib.LuaPushNil (luaState);
 				return 1;
 			}
 
@@ -1185,7 +1184,6 @@ namespace NLua
 			}
 
 			translator.ThrowError (luaState, "Cannot call (" + operation + ") on object type " + type.Name);
-			LuaLib.LuaPushNil (luaState);
 			return 1;
 		}
 

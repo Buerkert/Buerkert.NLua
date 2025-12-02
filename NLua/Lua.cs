@@ -415,7 +415,6 @@ end
 
 			if (caughtExcept != null) {
 				translator.ThrowError (luaState, caughtExcept);
-				LuaLib.LuaPushNil (luaState);
 				return 1;
 			} else
 				return 0;

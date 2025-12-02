@@ -211,7 +211,6 @@ namespace NLua.Method
 					if (!isStatic) {
 						if (targetObject == null) {
 							_Translator.ThrowError (luaState, String.Format ("instance method '{0}' requires a non null target object", _MethodName));
-							LuaLib.LuaPushNil (luaState);
 							return 1;
 						}
 
