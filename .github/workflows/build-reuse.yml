@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ windows-latest, windows-11-arm, ubuntu-latest, ubuntu-24.04-arm ]
-        net: [8.x, 9.x]
+        net: [8, 9]
 
     runs-on: ${{matrix.os}}
 
@@ -27,7 +27,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: ${{matrix.net}}
+          dotnet-version: ${{matrix.net}}.x
           config-file: nuget.config
           source-url: https://nuget.pkg.github.com/Buerkert/index.json
         env:
@@ -37,7 +37,7 @@ jobs:
         run: dotnet build -c Release --version-suffix "${{ inputs.version_suffix }}"
         
       - name: Run unit tests
-        run: dotnet test
+        run: dotnet test -f net${{matrix.net}}.0
         
   pack:
     
