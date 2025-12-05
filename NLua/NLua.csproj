@@ -1,6 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
         <AssemblyTitle>Buerkert.NLua</AssemblyTitle>
         <Product>Buerkert.NLua</Product>
         <Company>Buerkert Werke GmbH &amp; Co. KG</Company>
@@ -10,6 +9,7 @@
         </Copyright>
         <VersionPrefix>1.7.0</VersionPrefix>
         <VersionSuffix>branch</VersionSuffix>
+        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
     </PropertyGroup>
     <PropertyGroup>
         <PackageId>Buerkert.NLua</PackageId>
