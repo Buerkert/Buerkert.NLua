@@ -39,6 +39,7 @@ jobs:
   pack:
     
     runs-on: windows-latest
+    needs: build
 
     steps:
       - name: Checkout
