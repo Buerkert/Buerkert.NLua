@@ -82,6 +82,25 @@ namespace NLua
 		ObjectTranslator translator;
 
 		/*
+		 * C function wrapper. Has to be in Lua to not mess up the CLR stack
+		 */
+		public const string LuaCFunctionWrapper = @"local function w(f)return function(...)local r={_G.pcall(f,...)}if not _G.table.remove(r, 1) then _G.error('UNWRAPPED LUA ERROR FROM MANAGED CODE!');elseif _G.table.remove(r, 1) then _G.error(_G.table.unpack(r));else return _G.table.unpack(r);end end end;return w";
+		//@"local function wrap(func)
+		//      return function(...)
+		//          local r = { _G.pcall(func, ...) }
+		//          if not _G.table.remove(r, 1) then
+		//              _G.error('UNWRAPPED LUA ERROR FROM MANAGED CODE!')
+		//          elseif _G.table.remove(r, 1) then
+		//              _G.error(_G.table.unpack(r))
+		//          else
+		//              return _G.table.unpack(r)
+		//          end
+		//      end
+		//  end
+
+		//  return wrap";
+		
+		/*
 		 * __index metafunction for CLR objects. Implemented in Lua.
 		 */
 		static string luaIndexFunction =
@@ -142,8 +161,8 @@ namespace NLua
 			var exception = translator.GetObject(luaState, -1) as LuaScriptException;
 
 			if (exception != null)
-				LuaLib.LuaError(luaState);
-			return result;
+				return translator.ErrorFromWrappedCFunction(luaState);
+			return translator.ReturnFromWrappedCFunction(luaState, result);
 		}
 
 		/*
@@ -155,7 +174,7 @@ namespace NLua
 		private static int CollectObject (LuaState luaState)
 		{
 			var translator = ObjectTranslatorPool.Instance.Find (luaState);
-			return CollectObject (luaState, translator);
+			return translator.ReturnFromWrappedCFunction(luaState,CollectObject (luaState, translator));
 		}
 
 		private static int CollectObject (LuaState luaState, ObjectTranslator translator)
@@ -177,7 +196,7 @@ namespace NLua
 		private static int ToStringLua (LuaState luaState)
 		{
 			var translator = ObjectTranslatorPool.Instance.Find (luaState);
-			return ToStringLua (luaState, translator);
+			return translator.ReturnFromWrappedCFunction(luaState,ToStringLua (luaState, translator));
 		}
 
 		private static int ToStringLua (LuaState luaState, ObjectTranslator translator)
@@ -206,8 +225,8 @@ namespace NLua
 			var exception = translator.GetObject(luaState, -1) as LuaScriptException;
 
 			if (exception != null)
-				LuaLib.LuaError(luaState);
-			return result;
+				return translator.ErrorFromWrappedCFunction(luaState);
+			return translator.ReturnFromWrappedCFunction(luaState, result);
 		}
 	
 		/*
@@ -223,8 +242,8 @@ namespace NLua
 			var exception = translator.GetObject(luaState, -1) as LuaScriptException;
 
 			if (exception != null)
-				LuaLib.LuaError(luaState);
-			return result;
+				return translator.ErrorFromWrappedCFunction(luaState);
+			return translator.ReturnFromWrappedCFunction(luaState, result);
 		}
 
 		/*
@@ -240,8 +259,8 @@ namespace NLua
 			var exception = translator.GetObject(luaState, -1) as LuaScriptException;
 
 			if (exception != null)
-				LuaLib.LuaError(luaState);
-			return result;
+				return translator.ErrorFromWrappedCFunction(luaState);
+			return translator.ReturnFromWrappedCFunction(luaState, result);
 		}
 		
 		/*
@@ -257,8 +276,8 @@ namespace NLua
 			var exception = translator.GetObject(luaState, -1) as LuaScriptException;
 
 			if (exception != null)
-				LuaLib.LuaError(luaState);
-			return result;
+				return translator.ErrorFromWrappedCFunction(luaState);
+			return translator.ReturnFromWrappedCFunction(luaState, result);
 		}
 
 		/*
@@ -274,8 +293,8 @@ namespace NLua
 			var exception = translator.GetObject(luaState, -1) as LuaScriptException;
 
 			if (exception != null)
-				LuaLib.LuaError(luaState);
-			return result;
+				return translator.ErrorFromWrappedCFunction(luaState);
+			return translator.ReturnFromWrappedCFunction(luaState, result);
 		}
 	
 		/*
@@ -291,8 +310,8 @@ namespace NLua
 			var exception = translator.GetObject(luaState, -1) as LuaScriptException;
 
 			if (exception != null)
-				LuaLib.LuaError(luaState);
-			return result;
+				return translator.ErrorFromWrappedCFunction(luaState);
+			return translator.ReturnFromWrappedCFunction(luaState, result);
 		}
 
 		static int UnaryNegationLua (LuaState luaState, ObjectTranslator translator)
@@ -330,8 +349,8 @@ namespace NLua
 			var exception = translator.GetObject(luaState, -1) as LuaScriptException;
 
 			if (exception != null)
-				LuaLib.LuaError(luaState);
-			return result;
+				return translator.ErrorFromWrappedCFunction(luaState);
+			return translator.ReturnFromWrappedCFunction(luaState, result);
 		}
 
 		/*
@@ -347,8 +366,8 @@ namespace NLua
 			var exception = translator.GetObject(luaState, -1) as LuaScriptException;
 
 			if (exception != null)
-				LuaLib.LuaError(luaState);
-			return result;
+				return translator.ErrorFromWrappedCFunction(luaState);
+			return translator.ReturnFromWrappedCFunction(luaState, result);
 		}
 		
 		/*
@@ -364,8 +383,8 @@ namespace NLua
 			var exception = translator.GetObject(luaState, -1) as LuaScriptException;
 
 			if (exception != null)
-				LuaLib.LuaError(luaState);
-			return result;
+				return translator.ErrorFromWrappedCFunction(luaState);
+			return translator.ReturnFromWrappedCFunction(luaState, result);
 		}		
 
 		/// <summary>
@@ -423,8 +442,8 @@ namespace NLua
 			var exception = translator.GetObject(luaState, -1) as LuaScriptException;
 
 			if (exception != null)
-				LuaLib.LuaError(luaState);
-			return result;
+				return translator.ErrorFromWrappedCFunction(luaState);
+			return translator.ReturnFromWrappedCFunction(luaState, result);
 		}
 
 		private int GetMethodInternal (LuaState luaState)
@@ -536,8 +555,8 @@ namespace NLua
 			var exception = translator.GetObject(luaState, -1) as LuaScriptException;
 
 			if (exception != null)
-				LuaLib.LuaError(luaState);
-			return result;
+				return translator.ErrorFromWrappedCFunction(luaState);
+			return translator.ReturnFromWrappedCFunction(luaState, result);
 		}
 
 		private int GetBaseMethodInternal (LuaState luaState)
@@ -829,8 +848,8 @@ namespace NLua
 			var exception = translator.GetObject(luaState, -1) as LuaScriptException;
 
 			if (exception != null)
-				LuaLib.LuaError(luaState);
-			return result;
+				return translator.ErrorFromWrappedCFunction(luaState);
+			return translator.ReturnFromWrappedCFunction(luaState, result);
 		}
 
 		private int SetFieldOrPropertyInternal (LuaState luaState)
@@ -1025,8 +1044,8 @@ namespace NLua
 			var exception = translator.GetObject(luaState, -1) as LuaScriptException;
 
 			if (exception != null)
-				LuaLib.LuaError(luaState);
-			return result;
+				return translator.ErrorFromWrappedCFunction(luaState);
+			return translator.ReturnFromWrappedCFunction(luaState, result);
 		}
 
 		private int GetClassMethodInternal (LuaState luaState)
@@ -1070,8 +1089,8 @@ namespace NLua
 			var exception = translator.GetObject(luaState, -1) as LuaScriptException;
 
 			if (exception != null)
-				LuaLib.LuaError(luaState);
-			return result;
+				return translator.ErrorFromWrappedCFunction(luaState);
+			return translator.ReturnFromWrappedCFunction(luaState, result);
 		}
 
 		private int SetClassFieldOrPropertyInternal (LuaState luaState)
@@ -1102,8 +1121,8 @@ namespace NLua
 			var exception = translator.GetObject(luaState, -1) as LuaScriptException;
 
 			if (exception != null)
-				LuaLib.LuaError(luaState);
-			return result;
+				return translator.ErrorFromWrappedCFunction(luaState);
+			return translator.ReturnFromWrappedCFunction(luaState, result);
 		}
 
 		int CallDelegateInternal (LuaState luaState)
@@ -1159,8 +1178,8 @@ namespace NLua
 			var exception = translator.GetObject(luaState, -1) as LuaScriptException;
 
 			if (exception != null)
-				LuaLib.LuaError(luaState);
-			return result;
+				return translator.ErrorFromWrappedCFunction(luaState);
+			return translator.ReturnFromWrappedCFunction(luaState, result);
 		}
 
 		private int CallConstructorInternal (LuaState luaState)
