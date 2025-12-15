@@ -2139,7 +2139,7 @@ namespace NLuaTest
 				lua.LoadCLRPackage ();
 				lua.DoString ("import'System'");
 				var x  = lua.DoString ("return luanet.ctype(String)")[0];
-                Assert.That(typeof(String), Is.EqualTo(x), "#1 String ctype test");
+                Assert.That(x, Is.EqualTo(typeof(String)), "#1 String ctype test");
 			}
 		}
 
