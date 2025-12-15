@@ -1,6 +1,9 @@
-name: build-deploy
+name: deploy
 
 on:
+  push:
+    branches:
+      - master
   release:
     types: [ published ]
 
