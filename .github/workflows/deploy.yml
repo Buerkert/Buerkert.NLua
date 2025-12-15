@@ -1,0 +1,37 @@
+name: build-deploy
+
+on:
+  release:
+    types: [ published ]
+
+jobs:
+  
+  build:
+    uses: ./.github/workflows/build-reuse.yml
+    with:
+      version_suffix: ${{ github.event_name == 'release' && '' || github.run_number }}
+
+  deploy:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download NuGet package
+        uses: actions/download-artifact@v4
+        with:
+          name: NLua
+          path: package
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+          config-file: nuget.config
+          source-url: https://nuget.pkg.github.com/Buerkert/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Push generated package to GitHub registry
+        run: dotnet nuget push package/Buerkert.NLua.*.nupkg --api-key ${{secrets.GITHUB_TOKEN}}
