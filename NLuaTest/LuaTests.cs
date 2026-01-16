@@ -1370,7 +1370,7 @@ namespace NLuaTest
 				try
 				{
 					lua.DoString("luanet.load_assembly(\"NLuaTest\")");
-					lua.DoString("TestClass=luanet.import_type(\"NLuaTest.TestTypes.TestClass\")");
+					lua.DoString("TestClass=luanet.import_type(\"NLuaTest.Mock.TestClass\")");
 					lua.DoString("test=TestClass(3, 3)");
 					Assert.Fail("Should throw an Exception");
 				}
@@ -2728,24 +2728,14 @@ namespace NLuaTest
                 "       test:exceptionMethod() " +
                 "   end" +
                 "   err1, errMsg1 = pcall(callMethod);\n" +
-              //  "   err2, errMsg2 = pcall(callMethod);\n" +
                 "end ";
 
-            //string script2 = "   err, errMsg = pcall(test.exceptionMethod,test);\n";
 
             TestClass test = new TestClass();
 
             using (Lua lua = new Lua())
             {
                 lua["test"] = test;
-
-                //lua.DoString(script2);
-
-                //bool err = (bool)lua["err"];
-                //var errMsg = (Exception)lua["errMsg"];
-                //Assert.AreEqual(false, err);
-                //Assert.AreNotEqual(null, errMsg.InnerException);
-                //Assert.AreEqual("exception test", errMsg.InnerException.Message);
 
                 lua.DoString(script1);
                 (lua["run"] as LuaFunction).Call();
