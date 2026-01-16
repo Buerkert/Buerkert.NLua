@@ -5,9 +5,9 @@
         <Company>Buerkert Werke GmbH &amp; Co. KG</Company>
         <Copyright>
             original Copyright © Vinicius Jarina 2019
-            modified by Copyright (c) Buerkert Fluid Control Systems 2021
+            modified by Copyright (c) Buerkert Fluid Control Systems 2026
         </Copyright>
-        <VersionPrefix>1.7.0</VersionPrefix>
+        <VersionPrefix>1.8.0</VersionPrefix>
         <VersionSuffix>branch</VersionSuffix>
         <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
     </PropertyGroup>
