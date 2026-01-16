@@ -665,7 +665,15 @@ namespace NLua
 			LuaLib.LuaPushString(luaState, "luaNet_cfuncwrapper");
 			LuaLib.LuaRawGet(luaState, (int)LuaIndexes.Registry);
 			LuaLib.LuaPushStdCallCFunction(luaState, func);
-			LuaLib.LuaPCall(luaState, 1, 1, 0);
+			int error = LuaLib.LuaPCall(luaState, 1, 1, 0);
+			if (error != 0)
+			{
+				// There is really no reason for this to happen, but just in case
+				object err = GetObject(luaState, -1);
+				err ??= "UNKNOWN ERROR";
+				LuaLib.LuaPop(luaState, 1);
+				throw new LuaException($"Failed to wrap native function: {err}");
+			}
 		}
 
 		/*
