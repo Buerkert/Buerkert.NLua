@@ -9,7 +9,7 @@
         </Copyright>
         <VersionPrefix>1.8.0</VersionPrefix>
         <VersionSuffix>branch</VersionSuffix>
-        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+        <TargetFramework>net8.0</TargetFramework>
     </PropertyGroup>
     <PropertyGroup>
         <PackageId>Buerkert.NLua</PackageId>
@@ -34,7 +34,7 @@
         <Content Include="..\NLua.png" Pack="true" PackagePath="" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Buerkert.KeraLua" Version="1.7.0-14" />
+        <PackageReference Include="Buerkert.KeraLua" Version="1.7.0-14" /> <!-- TODO: update to 1.7.0 as soon as its available -->
         <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
     </ItemGroup>
 </Project>
