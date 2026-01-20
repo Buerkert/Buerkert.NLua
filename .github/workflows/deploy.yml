@@ -12,7 +12,7 @@ jobs:
   build:
     uses: ./.github/workflows/build-reuse.yml
     with:
-      version_suffix: ${{ github.event_name == 'release' && '' || github.run_number }}
+      version_suffix: ${{ github.event_name != 'release' && github.run_number || '' }}
 
   deploy:
     runs-on: windows-latest
