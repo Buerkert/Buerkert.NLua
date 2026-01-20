@@ -12,3 +12,5 @@ on:
 jobs:
   build:
     uses: ./.github/workflows/build-reuse.yml
+    with:
+      test_var: ${{ github.event_name == 'test' && github.run_number || '' }}
