@@ -34,7 +34,7 @@
         <Content Include="..\NLua.png" Pack="true" PackagePath="" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Buerkert.KeraLua" Version="1.7.0-14" /> <!-- TODO: update to 1.7.0 as soon as its available -->
+        <PackageReference Include="Buerkert.KeraLua" Version="1.7.0" />
         <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
     </ItemGroup>
 </Project>
