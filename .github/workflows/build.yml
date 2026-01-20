@@ -13,4 +13,4 @@ jobs:
   build:
     uses: ./.github/workflows/build-reuse.yml
     with:
-      version_suffix: ${{ github.event_name == 'test' && github.run_number || '' }}
+      version_suffix: ${{ github.event_name == 'push' && github.run_number || '' }}
