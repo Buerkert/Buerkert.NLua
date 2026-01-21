@@ -1360,6 +1360,27 @@ namespace NLuaTest
 			}
 		}
 		/*
+		 * Tests instantiating an object with one-argument constructor
+		 */
+		[Test]
+		public void CreateNetObjectWrongArgCons()
+		{
+			using (Lua lua = new Lua())
+			{
+				try
+				{
+					lua.DoString("luanet.load_assembly(\"NLuaTest\")");
+					lua.DoString("TestClass=luanet.import_type(\"NLuaTest.Mock.TestClass\")");
+					lua.DoString("test=TestClass(3, 3)");
+					Assert.Fail("Should throw an Exception");
+				}
+				catch (Exception e)
+				{
+					Assert.That(e is LuaScriptException, "#1");
+				}
+			}
+		}
+		/*
         * Tests instantiating an object with overloaded constructor
         */
 		[Test]
@@ -2118,7 +2139,7 @@ namespace NLuaTest
 				lua.LoadCLRPackage ();
 				lua.DoString ("import'System'");
 				var x  = lua.DoString ("return luanet.ctype(String)")[0];
-                Assert.That(typeof(String), Is.EqualTo(x), "#1 String ctype test");
+                Assert.That(x, Is.EqualTo(typeof(String)), "#1 String ctype test");
 			}
 		}
 
@@ -2666,6 +2687,69 @@ namespace NLuaTest
             }
 		}
 
+		[Test]
+        public void ThrowMultipleExceptions()
+        {
+            using (Lua lua = new Lua())
+            {
+	            lua.DoString ("luanet.load_assembly('mscorlib')");
+	            lua.DoString ("luanet.load_assembly('NLuaTest')");
+	            lua.DoString ("TestClass=luanet.import_type('NLuaTest.Mock.TestClass')");
+	            lua.DoString ("test=TestClass()");
+                lua.DoString("err,errMsg = pcall(test.exceptionMethod,test)");
+                bool err = (bool)lua["err"];
+
+                var errMsg = (Exception)lua["errMsg"];
+                
+                Assert.That(err, Is.False);
+                Assert.That(errMsg.InnerException, Is.Not.Null);
+                Assert.That(errMsg.InnerException.Message, Is.EqualTo("exception test"));
+
+                lua.DoString("err2,errMsg2 = pcall(test.exceptionMethod,test)");
+                err = (bool)lua["err2"];
+
+                errMsg = (Exception)lua["errMsg2"];
+                Assert.That(err, Is.False);
+                Assert.That(errMsg.InnerException, Is.Not.Null);
+                Assert.That(errMsg.InnerException.Message, Is.EqualTo("exception test"));
+            }
+        }
+
+        /*
+        * Tests capturing multiple exceptions in LuaFunction call
+        */
+        [Test]
+        public void ThrowMultipleExceptionsInScript()
+        {
+            string script1 =
+                "function run()\n" +
+                "   function callMethod() " +
+                "       test:exceptionMethod() " +
+                "       test:exceptionMethod() " +
+                "   end" +
+                "   err1, errMsg1 = pcall(callMethod);\n" +
+                "end ";
+
+
+            TestClass test = new TestClass();
+
+            using (Lua lua = new Lua())
+            {
+                lua["test"] = test;
+
+                lua.DoString(script1);
+                (lua["run"] as LuaFunction).Call();
+                (lua["run"] as LuaFunction).Call();
+
+                bool err = (bool)lua["err1"];
+                var errMsg = (Exception)lua["errMsg1"];
+                Assert.That(err, Is.False);
+                Assert.That(errMsg.InnerException, Is.Not.Null);
+                Assert.That(errMsg.InnerException.Message, Is.EqualTo("exception test"));
+            }
+        }
+
+		
 		static Lua m_lua;
 					
 	}

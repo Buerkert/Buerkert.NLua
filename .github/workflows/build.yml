@@ -11,28 +11,4 @@ on:
 
 jobs:
   build:
-
-    runs-on: windows-latest
-
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.x
-        config-file: nuget.config
-        source-url: https://nuget.pkg.github.com/Buerkert/index.json
-      env:
-        NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-    - name: Build with dotnet
-      run: dotnet build -c Release
-    - name: Run unit tests
-      run: dotnet test
-    - name: Pack
-      run: dotnet pack -c Release -o package
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: NLua
-        path: package\*nupkg
+    uses: ./.github/workflows/build-reuse.yml

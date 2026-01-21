@@ -7,7 +7,7 @@ commercial purposes at absolutely no cost.
 
 ===============================================================================
 
-Copyright (c) 2021 Buerkert  
+Copyright (c) 2026 Buerkert  
 Copyright (C) 2013 - Vinicius Jarina (viniciusjarina@gmail.com)  
 Copyright (C) 2012 Megax <http://megax.yeahunter.hu/>  
 Copyright (C) 2003-2005 Fabio Mascarenhas de Queiroz.  

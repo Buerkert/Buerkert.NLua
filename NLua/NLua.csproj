@@ -1,15 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
         <AssemblyTitle>Buerkert.NLua</AssemblyTitle>
         <Product>Buerkert.NLua</Product>
         <Company>Buerkert Werke GmbH &amp; Co. KG</Company>
         <Copyright>
             original Copyright © Vinicius Jarina 2019
-            modified by Copyright (c) Buerkert Fluid Control Systems 2021
+            modified by Copyright (c) Buerkert Fluid Control Systems 2026
         </Copyright>
-        <VersionPrefix>1.7.0</VersionPrefix>
+        <VersionPrefix>1.8.0</VersionPrefix>
         <VersionSuffix>branch</VersionSuffix>
+        <TargetFramework>net8.0</TargetFramework>
     </PropertyGroup>
     <PropertyGroup>
         <PackageId>Buerkert.NLua</PackageId>
@@ -34,7 +34,7 @@
         <Content Include="..\NLua.png" Pack="true" PackagePath="" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Buerkert.KeraLua" Version="1.6.0" />
+        <PackageReference Include="Buerkert.KeraLua" Version="1.7.0" />
         <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
     </ItemGroup>
 </Project>

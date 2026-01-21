@@ -1,0 +1,65 @@
+name: build
+on:
+  workflow_call:
+    inputs:
+      version_suffix:
+        description: 'Version suffix for the build (e.g. "beta1", "build.123")'
+        required: false
+        type: string
+        default: ""
+
+jobs:
+  build:
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ windows-latest, windows-11-arm, ubuntu-latest, ubuntu-24.04-arm ]
+
+    runs-on: ${{matrix.os}}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+          config-file: nuget.config
+          source-url: https://nuget.pkg.github.com/Buerkert/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Build with dotnet
+        run: dotnet build -c Release --version-suffix "${{ inputs.version_suffix }}"
+
+      - name: Run unit tests
+        run: dotnet test
+  
+  pack:
+    
+    runs-on: windows-latest
+    needs: build
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+          config-file: nuget.config
+          source-url: https://nuget.pkg.github.com/Buerkert/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Pack
+        run: dotnet pack -c Release -o package --version-suffix "${{ inputs.version_suffix }}"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: NLua
+          path: package/*nupkg

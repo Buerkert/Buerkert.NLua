@@ -319,6 +319,9 @@ end
 			}
 			LuaLib.LuaNetPushGlobalTable (luaState);
 			LuaLib.LuaGetGlobal (luaState, "luanet");
+			LuaLib.LuaPushString (luaState, "_G");
+			LuaLib.LuaGetGlobal(luaState,"_G");
+			LuaLib.LuaSetTable(luaState,-3);
 			LuaLib.LuaPushString (luaState, "getmetatable");
 			LuaLib.LuaGetGlobal (luaState, "getmetatable");
 			LuaLib.LuaSetTable (luaState, -3);
@@ -415,7 +418,6 @@ end
 
 			if (caughtExcept != null) {
 				translator.ThrowError (luaState, caughtExcept);
-				LuaLib.LuaPushNil (luaState);
 				return 1;
 			} else
 				return 0;
