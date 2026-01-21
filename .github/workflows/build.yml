@@ -12,3 +12,30 @@ on:
 jobs:
   build:
     uses: ./.github/workflows/build-reuse.yml
+    
+    
+  deploy-test:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download NuGet package
+        uses: actions/download-artifact@v4
+        with:
+          name: NLua
+          path: package
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+          config-file: nuget.config
+          source-url: https://nuget.pkg.github.com/Buerkert/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Push generated package to GitHub registry
+        run: ls package/Buerkert.NLua.*.nupkg
