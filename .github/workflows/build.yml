@@ -37,7 +37,7 @@ jobs:
           config-file: nuget.config
           source-url: https://nuget.pkg.github.com/Buerkert/index.json
         env:
-          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          NUGET_AUTH_TOKEN: dummy
 
       - name: Push generated package to GitHub registry
-        run: ls package/Buerkert.NLua.*.nupkg
+        run: dotnet nuget push package/Buerkert.NLua.*.nupkg --api-key dummy
