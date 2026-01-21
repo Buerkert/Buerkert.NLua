@@ -7,7 +7,7 @@
             original Copyright © Vinicius Jarina 2019
             modified by Copyright (c) Buerkert Fluid Control Systems 2026
         </Copyright>
-        <VersionPrefix>1.8.0</VersionPrefix>
+        <VersionPrefix>1.7.0</VersionPrefix>
         <VersionSuffix>branch</VersionSuffix>
         <TargetFramework>net8.0</TargetFramework>
     </PropertyGroup>
