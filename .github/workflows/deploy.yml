@@ -15,7 +15,7 @@ jobs:
       version_suffix: ${{ github.event_name != 'release' && github.run_number || '' }}
 
   deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     needs: build
 
     steps:
